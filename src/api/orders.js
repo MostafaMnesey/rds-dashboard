@@ -39,7 +39,7 @@ let mockOrders = [
 
 export const getOrders = async (params) => {
   try {
-    const response = await API.get('/dashboard/orders', { params });
+    const response = await API.get('/dashboard/orders', );
     return response.data;
   } catch (error) {
     console.warn("Backend orders fetch failed, using mock data");
