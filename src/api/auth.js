@@ -1,42 +1,23 @@
-import API from './index';
+import API from "./index";
 
-// MOCK Fallbacks for demonstration
-const mockAdmin = {
-  id: 'admin-uuid-1',
-  name: 'Sarah Connor',
-  email: 'admin@ecommerce.com',
-  role: { name: 'Super Admin' },
-  status: 'ACTIVE'
+/**
+ * POST /dashboard/system/admins/login
+ * Body: { email, password }
+ * Returns: { success, message, data: { token, refreshToken, admin? } }
+ */
+export const login = async ({ email, password }) => {
+  // Backend returns the full response (we already unwrap .data in interceptor)
+  return await API.post("/dashboard/system/admins/login", { email, password });
 };
 
-export const login = async (email, password) => {
-  try {
-    const response = await API.post('/dashboard/system/admins/login', { email, password });
-    if (response.success && response.data) {
-      localStorage.setItem('admin_token', response.data.token);
-      localStorage.setItem('admin_user', JSON.stringify(mockAdmin)); // or parse from token if present
-      return response;
-    }
-  } catch (error) {
-    console.warn("Backend login failed, using mock authentication fallback: ", error.message);
-    if (email === 'admin@ecommerce.com' && password === 'SecurePassword123!') {
-      const mockResponse = {
-        success: true,
-        message: "ADMIN.ADMIN_LOGGED_IN_SUCCESS",
-        data: {
-          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mockToken",
-          refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mockRefreshToken"
-        }
-      };
-      localStorage.setItem('admin_token', mockResponse.data.token);
-      localStorage.setItem('admin_user', JSON.stringify(mockAdmin));
-      return mockResponse;
-    }
-    throw error;
-  }
+/**
+ * GET current admin profile (optional — if backend provides it)
+ */
+export const getMe = async () => {
+  return await API.get("/dashboard/system/admins/me");
 };
 
 export const logout = () => {
-  localStorage.removeItem('admin_token');
-  localStorage.removeItem('admin_user');
+  localStorage.removeItem("admin_token");
+  localStorage.removeItem("admin_user");
 };

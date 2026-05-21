@@ -1,40 +1,40 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://rdspharma.cloud',
-  timeout: 10000,
+  baseURL: import.meta.env.VITE_API_URL || "https://rdspharma.cloud",
+  timeout: 15000,
 });
 
-// Request interceptor to add authorization token and language header
+// Request interceptor — attach token
 API.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('admin_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    const lang = localStorage.getItem('admin_lang') || 'en';
-    config.headers['x-lang'] = lang;
+    const token = localStorage.getItem("admin_token");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle errors globally
+// Response interceptor — unwrap & global error handling
 API.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      // Handle unauthorized session expiration
-      localStorage.removeItem('admin_token');
-      localStorage.removeItem('admin_user');
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
+    if (axios.isCancel(error)) return Promise.reject(error);
+
+    // 401 — session expired
+    if (error.response?.status === 401) {
+      localStorage.removeItem("admin_token");
+      localStorage.removeItem("admin_user");
+      if (!window.location.pathname.includes("/login")) {
+        window.location.href = "/admin/login";
       }
     }
+
+    // Normalize error shape so callers can read error.response.data.message / .error
     return Promise.reject(error);
   }
 );
+
+export const createCancelToken = () => new AbortController();
 
 export default API;
