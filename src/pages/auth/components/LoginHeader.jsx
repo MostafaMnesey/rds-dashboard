@@ -6,7 +6,7 @@ const LoginHeader = () => {
       <img
         src="https://res.cloudinary.com/dbvh5i83q/image/upload/v1776082859/rds_logo_xpmbfn.webp"
         alt="Logo"
-        className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-main text-white shadow-rds-cta"
+        className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-white shadow-rds-cta"
       />
       <h1 className="font-oswald text-2xl font-bold uppercase tracking-wide text-soft-black sm:text-3xl">
         Welcome back
