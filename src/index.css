@@ -361,3 +361,46 @@ input[type="number"] {
   padding: 0.25em 1em 0.25em 0;
   border-radius: 8px 0 0 8px;
 }
+
+/* ============================================
+   iOS Zoom Fix — keep font-size ≥ 16px on mobile
+   Below 16px, iOS Safari auto-zooms on focus 😡
+   ============================================ */
+@media (max-width: 768px) {
+  /* All form controls — native */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* AntD inputs */
+  .ant-input,
+  .ant-input-affix-wrapper input,
+  .ant-input-number-input,
+  .ant-select-selector,
+  .ant-select-selection-search-input,
+  .ant-picker-input input {
+    font-size: 16px !important;
+  }
+
+  /* Our custom rds-input class */
+  .rds-input,
+  .rds-input input,
+  .rds-input .ant-input,
+  .rds-input .ant-input-number-input,
+  .rds-input .ant-select-selector,
+  .rds-input .ant-select-selection-search-input {
+    font-size: 16px !important;
+  }
+}
+
+/* Keep desktop typography refined */
+@media (min-width: 769px) {
+  .rds-input,
+  .rds-input .ant-input,
+  .rds-input .ant-input-number-input,
+  .rds-input .ant-select-selector {
+    font-size: 14px;
+  }
+}

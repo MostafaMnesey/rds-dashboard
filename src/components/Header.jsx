@@ -8,10 +8,11 @@ import {
   User,
   LogOut,
   Settings,
+  Menu,
 } from "lucide-react";
 import { useAppStore } from "../store";
 
-const Header = ({ title, subtitle }) => {
+const Header = ({ title, subtitle, onMenuClick }) => {
   const navigate = useNavigate();
   const user = useAppStore((s) => s.user);
   const clearAuth = useAppStore((s) => s.clearAuth);
@@ -63,23 +64,34 @@ const Header = ({ title, subtitle }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-30 flex h-20 items-center justify-between gap-6 border-b border-black/5 bg-white px-6 lg:px-8">
-      {/* Left — Page title */}
-      <div className="min-w-0 flex-1">
-        <h1 className="font-oswald truncate text-xl font-bold uppercase tracking-wide text-soft-black sm:text-2xl">
-          {title}
-        </h1>
-        {subtitle && (
-          <p className="mt-0.5 truncate text-xs text-secondary">{subtitle}</p>
-        )}
+    <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b border-black/5 bg-white px-4 sm:h-20 sm:px-6 lg:gap-6 lg:px-8">
+      {/* Left — Menu button (mobile) + Page title */}
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+        <button
+          type="button"
+          onClick={onMenuClick}
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/5 bg-white text-soft-black transition hover:border-black/10 hover:bg-black/[0.02] lg:hidden"
+          aria-label="Open menu"
+        >
+          <Menu size={18} />
+        </button>
+
+        <div className="min-w-0">
+          <h1 className="font-oswald truncate text-lg font-bold uppercase tracking-wide text-soft-black sm:text-xl lg:text-2xl">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="mt-0.5 truncate text-xs text-secondary">{subtitle}</p>
+          )}
+        </div>
       </div>
 
-      {/* Center — Global search (hidden on mobile) */}
-      <div className="hidden lg:block lg:w-80">
+      {/* Center — Global search (hidden on mobile/tablet) */}
+      <div className="hidden xl:block xl:w-80">
         <div className="relative flex items-center">
           <Search
             size={16}
-            className="absolute left-4 text-secondary pointer-events-none"
+            className="pointer-events-none absolute left-4 text-secondary"
           />
           <input
             type="text"
@@ -90,11 +102,11 @@ const Header = ({ title, subtitle }) => {
       </div>
 
       {/* Right — Actions */}
-      <div className="flex items-center gap-3">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
         {/* Notifications */}
         <button
           type="button"
-          className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-black/5 bg-white text-soft-black transition hover:border-black/10 hover:bg-black/[0.02]"
+          className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-black/5 bg-white text-soft-black transition hover:border-black/10 hover:bg-black/[0.02] sm:h-11 sm:w-11"
           aria-label="Notifications"
         >
           <AntBadge dot offset={[-2, 2]} color="#68bc52">
@@ -122,11 +134,14 @@ const Header = ({ title, subtitle }) => {
                 <p className="text-sm font-semibold leading-tight text-soft-black">
                   {user.name || "Admin"}
                 </p>
-                <p className="text-[10px] uppercase tracking-[0.14em] leading-tight text-secondary mt-0.5">
+                <p className="mt-0.5 text-[10px] uppercase leading-tight tracking-[0.14em] text-secondary">
                   {user.role?.name || "Admin"}
                 </p>
               </div>
-              <ChevronDown size={14} className="text-secondary" />
+              <ChevronDown
+                size={14}
+                className="hidden text-secondary sm:block"
+              />
             </button>
           </Dropdown>
         )}

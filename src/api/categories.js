@@ -28,3 +28,10 @@ export const deleteCategory = async (id) => {
   const response = await API.delete(`/dashboard/categories/${id}`);
   return response.data;
 };
+
+export const getAllCategories = async () => {
+  const response = await API.get("/dashboard/categories", {
+    params: { limit: 1000 },
+  });
+  return response.data;
+};

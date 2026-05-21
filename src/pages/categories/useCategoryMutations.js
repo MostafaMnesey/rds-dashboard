@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { toast } from "sonner";
+import toast from "react-hot-toast";
 import {
   createCategory,
   updateCategory,
   deleteCategory,
 } from "../../api/categories";
-import toast from "react-hot-toast";
+import { getErrorMessage, getSuccessMessage } from "../../lib/errors";
 
 const invalidateCategories = (queryClient) => {
   queryClient.invalidateQueries({ queryKey: ["categories"] });
@@ -18,13 +18,10 @@ export const useCreateCategory = () => {
     mutationFn: createCategory,
     onSuccess: (data) => {
       invalidateCategories(queryClient);
-      toast.success((data?.message) || "Category created");
+      toast.success(getSuccessMessage(data, "Category created"));
     },
     onError: (error) => {
-      toast.error(
-        (error?.response?.data?.message) ||
-          "Failed to create category"
-      );
+      toast.error(getErrorMessage(error, "Failed to create category"));
     },
   });
 };
@@ -37,13 +34,10 @@ export const useUpdateCategory = () => {
     onSuccess: (data, variables) => {
       invalidateCategories(queryClient);
       queryClient.invalidateQueries({ queryKey: ["category", variables.id] });
-      toast.success((data?.message) || "Category updated");
+      toast.success(getSuccessMessage(data, "Category updated"));
     },
     onError: (error) => {
-      toast.error(
-        (error?.response?.data?.message) ||
-          "Failed to update category"
-      );
+      toast.error(getErrorMessage(error, "Failed to update category"));
     },
   });
 };
@@ -55,13 +49,10 @@ export const useDeleteCategory = () => {
     mutationFn: deleteCategory,
     onSuccess: (data) => {
       invalidateCategories(queryClient);
-      toast.success((data?.message) || "Category deleted");
+      toast.success(getSuccessMessage(data, "Category deleted"));
     },
     onError: (error) => {
-      toast.error(
-        (error?.response?.data?.message) ||
-          "Failed to delete category"
-      );
+      toast.error(getErrorMessage(error, "Failed to delete category"));
     },
   });
 };

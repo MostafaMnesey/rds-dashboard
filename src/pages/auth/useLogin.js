@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { login } from "../../api/auth";
 import { useAppStore } from "../../store";
 import { loginSchema } from "./schema/loginSchema";
+import { getErrorMessage } from "../../lib/errors";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -41,9 +42,7 @@ export const useLogin = () => {
       navigate("/", { replace: true });
     },
     onError: (error) => {
-      const backendMessage =
-        error?.response?.data?.error || error?.response?.data?.message;
-      toast.error(backendMessage || "Invalid email or password");
+      toast.error(getErrorMessage(error, "Invalid email or password"));
     },
   });
 

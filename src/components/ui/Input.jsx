@@ -1,7 +1,6 @@
 import { memo, forwardRef, useId } from "react";
 import { Input as AntInput, Select as AntSelect, InputNumber } from "antd";
 import { Search, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
 import Label from "./Label";
 
 const { TextArea, Password } = AntInput;
@@ -26,19 +25,15 @@ const Input = forwardRef(
       className = "",
       inputClassName = "",
       id,
-      // select-specific
       options = [],
       allowClear = false,
       showSearch = false,
       mode,
-      // number-specific
       min,
       max,
       step,
-      // textarea-specific
       rows = 4,
       autoSize,
-      // input
       onChange,
       value,
       placeholder,
@@ -53,7 +48,9 @@ const Input = forwardRef(
 
     const statusProp = error ? { status: "error" } : {};
 
-    /* ---------- helpers ---------- */
+    // Apply `rds-input` class — used to bump font-size on mobile (see index.css)
+    const baseClass = `w-full rds-input ${inputClassName}`;
+
     const renderControl = () => {
       const sharedProps = {
         id: fieldId,
@@ -61,7 +58,7 @@ const Input = forwardRef(
         size: antSize,
         disabled,
         placeholder,
-        className: `w-full ${inputClassName}`,
+        className: baseClass,
         ...statusProp,
         ...rest,
       };
@@ -91,6 +88,7 @@ const Input = forwardRef(
               step={step}
               controls={false}
               prefix={prefix}
+              inputMode="decimal"
             />
           );
 
@@ -139,7 +137,6 @@ const Input = forwardRef(
             />
           );
 
-        // text, email, url, tel, etc.
         default:
           return (
             <AntInput
@@ -149,6 +146,15 @@ const Input = forwardRef(
               onChange={onChange}
               prefix={prefix}
               suffix={suffix}
+              inputMode={
+                type === "email"
+                  ? "email"
+                  : type === "tel"
+                    ? "tel"
+                    : type === "url"
+                      ? "url"
+                      : undefined
+              }
             />
           );
       }

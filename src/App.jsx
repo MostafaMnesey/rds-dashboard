@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -15,13 +15,14 @@ import LoadingState from "./components/ui/LoadingState";
 
 // Lazy-loaded pages (code splitting)
 const Login = lazy(() => import("./pages/auth/Login"));
-const Overview = lazy(() => import("./pages/Overview"));
-const Products = lazy(() => import("./pages/Products"));
+const Overview = lazy(() => import("./pages/overview/Overview"));
+const Products = lazy(() => import("./pages/products/Products"));
 const Categories = lazy(() => import("./pages/categories/Categories"));
 const Orders = lazy(() => import("./pages/orders/Orders"));
 const Blogs = lazy(() => import("./pages/blogs/Blogs"));
 const Banners = lazy(() => import("./pages/banners/Banners"));
-const System = lazy(() => import("./pages/System"));
+const System = lazy(() => import("./pages/system/System"));
+const Coupons = lazy(() => import("./pages/coupons/Coupons"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,18 +42,22 @@ const PAGE_TITLES = {
   "/blogs": "Blogs",
   "/banners": "Banners",
   "/system": "System & Admins",
+  "/coupons": "Coupons",
 };
 
 const DashboardLayout = ({ children }) => {
   const location = useLocation();
   const title = PAGE_TITLES[location.pathname] || "Dashboard";
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="flex min-h-screen w-full bg-off-white">
-      <Sidebar />
-      <div className="flex min-h-screen flex-1 flex-col pl-64">
-        <Header title={title} />
-        <main className="flex-1 p-6 lg:p-8">{children}</main>
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <div className="flex min-h-screen flex-1 flex-col lg:pl-64">
+        <Header title={title} onMenuClick={() => setSidebarOpen(true)} />
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );
@@ -140,6 +145,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <System />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/coupons"
+            element={
+              <ProtectedRoute>
+                <Coupons />
               </ProtectedRoute>
             }
           />
