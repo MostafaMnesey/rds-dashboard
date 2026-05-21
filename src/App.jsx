@@ -82,7 +82,7 @@ const PublicRoute = ({ children }) => {
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/admin">
+      <BrowserRouter basename="/">
         <Routes>
           <Route
             path="/login"
