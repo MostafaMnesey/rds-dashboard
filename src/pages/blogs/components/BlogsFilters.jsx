@@ -6,7 +6,7 @@ const BlogsFilters = ({ filters, onChange }) => {
     <div className="grid gap-3 sm:grid-cols-[1fr_220px]">
       <Input
         type="search"
-        placeholder="Search by title, slug..."
+        placeholder="Search by title"
         value={filters.search || ""}
         onChange={(e) => onChange({ ...filters, search: e.target.value })}
       />

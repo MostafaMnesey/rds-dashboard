@@ -1,34 +1,42 @@
 /**
  * Extract the best human-readable error message from an Axios error.
  * Priority:
- *   1. First validation error (from `errors` array)
+ *   1. First validation error (from `errors` array) — optionally translated
  *   2. `error` field
  *   3. `message` field
  *   4. Fallback string
+ *
+ * @param {Error} error
+ * @param {string} fallback
+ * @param {(code: string) => string | null} translator - optional code translator
  */
-export const getErrorMessage = (error, fallback = "Something went wrong") => {
+export const getErrorMessage = (
+  error,
+  fallback = "Something went wrong",
+  translator,
+) => {
   const data = error?.response?.data;
 
-  // 1. Specific validation errors
+  // 1. Specific validation errors (often error codes)
   if (Array.isArray(data?.errors) && data.errors.length > 0) {
-    return data.errors[0];
+    const first = data.errors[0];
+
+    // Try translator first (for backend error codes like "PASSWORD_PATTERN")
+    if (typeof first === "string" && translator) {
+      const translated = translator(first);
+      if (translated) return translated;
+    }
+    return first;
   }
 
-  // 2. Some endpoints return { error: "..." }
   if (data?.error) return data.error;
-
-  // 3. Standard { message: "..." }
   if (data?.message) return data.message;
 
-  // 4. Network / unknown errors
   if (error?.message && error.message !== "Network Error") return error.message;
 
   return fallback;
 };
 
-/**
- * Extract a success message from a normalized API response.
- */
 export const getSuccessMessage = (data, fallback = "Success") => {
   if (typeof data?.message === "string") return data.message;
   if (typeof data?.message === "object") {

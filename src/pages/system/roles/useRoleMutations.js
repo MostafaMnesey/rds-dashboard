@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { createRole } from "../../../api/system";
+import { createRole, deleteRole } from "../../../api/system";
 import { getErrorMessage, getSuccessMessage } from "../../../lib/errors";
 
 const invalidate = (qc) => qc.invalidateQueries({ queryKey: ["roles"] });
@@ -15,6 +15,20 @@ export const useCreateRole = () => {
     },
     onError: (error) => {
       toast.error(getErrorMessage(error, "Failed to create role"));
+    },
+  });
+};
+
+export const useDeleteRole = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: deleteRole,
+    onSuccess: (data) => {
+      invalidate(qc);
+      toast.success(getSuccessMessage(data, "Role deleted"));
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Failed to delete role"));
     },
   });
 };

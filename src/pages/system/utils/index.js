@@ -1,3 +1,5 @@
+import { ADMIN_ERROR_MESSAGES } from "../data/constants";
+
 /* ───────── Date ───────── */
 export const formatDate = (iso) => {
   if (!iso) return "—";
@@ -44,7 +46,6 @@ export const buildAdminPayload = (values, isEdit = false) => {
     status: values.status || "ACTIVE",
   };
 
-  // Only send password fields if provided (required on create, optional on edit)
   if (values.password) {
     payload.password = values.password;
     payload.confirmPassword = values.confirmPassword || values.password;
@@ -56,4 +57,13 @@ export const buildAdminPayload = (values, isEdit = false) => {
 export const normalizeAdminStatus = (status) => {
   if (!status) return "ACTIVE";
   return String(status).toUpperCase();
+};
+
+/* ───────── Error code → friendly message ─────────
+ * Translates backend error codes like "PASSWORD_PATTERN" into
+ * user-friendly messages. Returns the original code if unknown.
+ */
+export const translateAdminErrorCode = (code) => {
+  if (!code) return null;
+  return ADMIN_ERROR_MESSAGES[code] || code;
 };

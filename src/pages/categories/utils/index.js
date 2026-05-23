@@ -67,7 +67,7 @@ export const keywordsArrayToString = (arr) => {
 export const buildHref = (slug) => {
   if (!slug) return "";
   const clean = slug.toString().trim().replace(/^\/+|\/+$/g, "");
-  return `/category/${clean}`;
+  return `/collections/${clean}`;
 };
 
 /* -------- Form data builder -------- */

@@ -14,7 +14,6 @@ const translationSchema = z.object({
   lang: z.string(),
   title: z.string().min(1, "Title is required"),
   slug: z.string().optional(),
-  href: z.string().optional(),
   meta_title: z.string().optional(),
   meta_description: z.string().optional(),
   meta_keywords: z.array(z.string()).optional(),
@@ -39,7 +38,6 @@ const buildDefaults = (category) => {
         lang: "en",
         title: en?.title || "",
         slug: en?.slug || "",
-        href: en?.href || "",
         meta_title: en?.meta_title || "",
         meta_description: en?.meta_description || "",
         meta_keywords: keywordsStringToArray(en?.meta_keywords),
@@ -48,7 +46,6 @@ const buildDefaults = (category) => {
         lang: "ar",
         title: ar?.title || "",
         slug: ar?.slug || "",
-        href: ar?.href || "",
         meta_title: ar?.meta_title || "",
         meta_description: ar?.meta_description || "",
         meta_keywords: keywordsStringToArray(ar?.meta_keywords),
@@ -163,7 +160,6 @@ const CategoryFormDrawer = ({ open, onClose, category }) => {
               <CategoryTranslationsTabs
                 control={control}
                 setValue={setValue}
-                watch={watch}
                 errors={errors}
               />
             </div>

@@ -1,25 +1,55 @@
 import { memo, useMemo } from "react";
-import { Shield } from "lucide-react";
+import { Shield, Lock } from "lucide-react";
 import { DataTable, Badge } from "../../../../components/ui";
+import RoleRowActions from "./RoleRowActions";
 import { shortId } from "../../utils";
 
-const RolesTable = ({ items, loading, pagination, page, onPageChange }) => {
+/* Roles that should never be deletable (system-protected) */
+const PROTECTED_ROLES = ["ADMIN", "SUPER_ADMIN", "SUPERADMIN"];
+
+const RolesTable = ({
+  items,
+  loading,
+  pagination,
+  page,
+  onPageChange,
+  onDelete,
+  deletingId,
+}) => {
   const columns = useMemo(
     () => [
       {
         title: "Role",
         dataIndex: "name",
         key: "name",
-        render: (name) => (
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-main/10 text-main">
-              <Shield size={16} />
+        render: (name, record) => {
+          const isProtected = PROTECTED_ROLES.includes(
+            String(name || "").toUpperCase(),
+          );
+          return (
+            <div className="flex items-center gap-3">
+              <div
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                  isProtected
+                    ? "bg-amber-100 text-amber-700"
+                    : "bg-main/10 text-main"
+                }`}
+              >
+                {isProtected ? <Lock size={16} /> : <Shield size={16} />}
+              </div>
+              <div className="flex min-w-0 flex-col">
+                <span className="text-sm font-semibold uppercase tracking-wide text-soft-black">
+                  {name}
+                </span>
+                {isProtected && (
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-600">
+                    System role
+                  </span>
+                )}
+              </div>
             </div>
-            <span className="text-sm font-semibold uppercase tracking-wide text-soft-black">
-              {name}
-            </span>
-          </div>
-        ),
+          );
+        },
       },
       {
         title: "Translations",
@@ -59,8 +89,26 @@ const RolesTable = ({ items, loading, pagination, page, onPageChange }) => {
           </span>
         ),
       },
+      {
+        title: "Actions",
+        key: "actions",
+        width: 100,
+        align: "right",
+        render: (_, record) => {
+          const isProtected = PROTECTED_ROLES.includes(
+            String(record.name || "").toUpperCase(),
+          );
+          return (
+            <RoleRowActions
+              onDelete={() => onDelete(record.id)}
+              deleting={deletingId === record.id}
+              disabled={isProtected}
+            />
+          );
+        },
+      },
     ],
-    [],
+    [onDelete, deletingId],
   );
 
   return (

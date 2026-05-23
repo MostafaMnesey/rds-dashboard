@@ -5,6 +5,7 @@ import RolesFilters from "./components/RolesFilters";
 import RolesTable from "./components/RolesTable";
 import RoleFormDrawer from "./components/RoleFormDrawer";
 import { useRoles } from "./useRoles";
+import { useDeleteRole } from "./useRoleMutations";
 
 const RolesTab = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -22,8 +23,15 @@ const RolesTab = () => {
     onResetFilters,
   } = useRoles();
 
+  const deleteMutation = useDeleteRole();
+
   const handleCreate = useCallback(() => setDrawerOpen(true), []);
   const handleClose = useCallback(() => setDrawerOpen(false), []);
+
+  const handleDelete = useCallback(
+    (id) => deleteMutation.mutate(id),
+    [deleteMutation],
+  );
 
   return (
     <>
@@ -57,6 +65,8 @@ const RolesTab = () => {
         pagination={pagination}
         page={page}
         onPageChange={onPageChange}
+        onDelete={handleDelete}
+        deletingId={deleteMutation.isPending ? deleteMutation.variables : null}
       />
 
       <RoleFormDrawer open={drawerOpen} onClose={handleClose} />

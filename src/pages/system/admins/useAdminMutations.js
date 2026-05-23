@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { createAdmin, updateAdmin, deleteAdmin } from "../../../api/system";
 import { getErrorMessage, getSuccessMessage } from "../../../lib/errors";
+import { translateAdminErrorCode } from "../utils";
 
 const invalidate = (qc) => qc.invalidateQueries({ queryKey: ["admins"] });
 
@@ -14,7 +15,13 @@ export const useCreateAdmin = () => {
       toast.success(getSuccessMessage(data, "Admin created"));
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to create admin"));
+      toast.error(
+        getErrorMessage(
+          error,
+          "Failed to create admin",
+          translateAdminErrorCode,
+        ),
+      );
     },
   });
 };
@@ -29,7 +36,13 @@ export const useUpdateAdmin = () => {
       toast.success(getSuccessMessage(data, "Admin updated"));
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to update admin"));
+      toast.error(
+        getErrorMessage(
+          error,
+          "Failed to update admin",
+          translateAdminErrorCode,
+        ),
+      );
     },
   });
 };
@@ -43,7 +56,13 @@ export const useDeleteAdmin = () => {
       toast.success(getSuccessMessage(data, "Admin deleted"));
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Failed to delete admin"));
+      toast.error(
+        getErrorMessage(
+          error,
+          "Failed to delete admin",
+          translateAdminErrorCode,
+        ),
+      );
     },
   });
 };

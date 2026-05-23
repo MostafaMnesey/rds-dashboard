@@ -13,6 +13,10 @@ export const createRole = async (payload) => {
   return await API.post("/dashboard/system/roles/create", payload);
 };
 
+export const deleteRole = async (id) => {
+  return await API.delete(`/dashboard/system/roles/${id}`);
+};
+
 /* ───────── Admins ───────── */
 export const getAdmins = async (params) => {
   return await API.get("/dashboard/system/admins", { params });

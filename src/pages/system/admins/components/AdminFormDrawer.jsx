@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Drawer } from "antd";
 import { Loader2 } from "lucide-react";
 import Input from "../../../../components/ui/Input";
+import PasswordStrengthHints from "./PasswordStrengthHints";
 import { useCreateAdmin, useUpdateAdmin } from "../useAdminMutations";
 import { useRoles } from "../../roles/useRoles";
 import {
@@ -12,7 +13,14 @@ import {
   getRoleDisplayName,
   normalizeAdminStatus,
 } from "../../utils";
-import { ADMIN_STATUSES } from "../../data/constants";
+import {
+  ADMIN_STATUSES,
+  PASSWORD_REGEX,
+  PASSWORD_MIN_LENGTH,
+} from "../../data/constants";
+
+const PASSWORD_ERROR_MESSAGE =
+  "Password must be at least 8 characters and include uppercase, lowercase, number and a special character.";
 
 /* ───────── Schema (dynamic based on edit/create) ───────── */
 const buildSchema = (isEdit) =>
@@ -25,10 +33,17 @@ const buildSchema = (isEdit) =>
             .string()
             .optional()
             .refine(
-              (v) => !v || v.length >= 6,
-              "Password must be at least 6 characters",
+              (v) => !v || v.length >= PASSWORD_MIN_LENGTH,
+              `Password must be at least ${PASSWORD_MIN_LENGTH} characters`,
             )
-        : z.string().min(6, "Password must be at least 6 characters"),
+            .refine((v) => !v || PASSWORD_REGEX.test(v), PASSWORD_ERROR_MESSAGE)
+        : z
+            .string()
+            .min(
+              PASSWORD_MIN_LENGTH,
+              `Minimum ${PASSWORD_MIN_LENGTH} characters`,
+            )
+            .regex(PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE),
       confirmPassword: z.string().optional(),
       roleId: z.string().min(1, "Role is required"),
       status: z.enum(["ACTIVE", "INACTIVE"]),
@@ -76,6 +91,7 @@ const AdminFormDrawer = ({ open, onClose, admin }) => {
   } = useForm({
     resolver: zodResolver(buildSchema(isEdit)),
     defaultValues: buildDefaults(admin),
+    mode: "onChange",
   });
 
   useEffect(() => {
@@ -159,41 +175,47 @@ const AdminFormDrawer = ({ open, onClose, admin }) => {
             />
 
             {/* Password fields */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Controller
-                name="password"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    type="password"
-                    label="Password"
-                    required={!isEdit}
-                    placeholder="••••••••"
-                    hint={
-                      isEdit
-                        ? "Leave empty to keep current password."
-                        : "Minimum 6 characters."
-                    }
-                    {...field}
-                    error={errors?.password?.message}
-                  />
-                )}
-              />
+            <div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      type="password"
+                      label="Password"
+                      required={!isEdit}
+                      placeholder="Password@123"
+                      {...field}
+                      error={errors?.password?.message}
+                    />
+                  )}
+                />
 
-              <Controller
-                name="confirmPassword"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    type="password"
-                    label="Confirm Password"
-                    required={!isEdit}
-                    placeholder="••••••••"
-                    {...field}
-                    error={errors?.confirmPassword?.message}
-                  />
-                )}
-              />
+                <Controller
+                  name="confirmPassword"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      type="password"
+                      label="Confirm Password"
+                      required={!isEdit}
+                      placeholder="Password@123"
+                      {...field}
+                      error={errors?.confirmPassword?.message}
+                    />
+                  )}
+                />
+              </div>
+
+              {/* Live password strength hints */}
+              <PasswordStrengthHints control={control} name="password" />
+
+              {isEdit && (
+                <p className="mt-2 text-xs text-secondary">
+                  Leave password empty to keep the current one.
+                </p>
+              )}
             </div>
 
             <Controller
