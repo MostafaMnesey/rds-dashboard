@@ -42,15 +42,15 @@ const Header = ({ title, subtitle, onMenuClick }) => {
       ),
       onClick: () => navigate("/system"),
     },
-    {
-      key: "settings",
-      label: (
-        <span className="flex items-center gap-2 text-sm">
-          <Settings size={14} /> Settings
-        </span>
-      ),
-      onClick: () => navigate("/system"),
-    },
+    // {
+    //   key: "settings",
+    //   label: (
+    //     <span className="flex items-center gap-2 text-sm">
+    //       <Settings size={14} /> Settings
+    //     </span>
+    //   ),
+    //   onClick: () => navigate("/system"),
+    // },
     { type: "divider" },
     {
       key: "logout",
@@ -87,7 +87,7 @@ const Header = ({ title, subtitle, onMenuClick }) => {
       </div>
 
       {/* Center — Global search (hidden on mobile/tablet) */}
-      <div className="hidden xl:block xl:w-80">
+      {/* <div className="hidden xl:block xl:w-80">
         <div className="relative flex items-center">
           <Search
             size={16}
@@ -99,12 +99,12 @@ const Header = ({ title, subtitle, onMenuClick }) => {
             className="h-11 w-full rounded-xl border border-black/10 bg-[#fafaf9] pl-11 pr-4 text-sm text-soft-black outline-none transition placeholder:text-secondary/70 focus:border-main focus:bg-white"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Right — Actions */}
       <div className="flex shrink-0 items-center gap-2 sm:gap-3">
         {/* Notifications */}
-        <button
+        {/* <button
           type="button"
           className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-black/5 bg-white text-soft-black transition hover:border-black/10 hover:bg-black/[0.02] sm:h-11 sm:w-11"
           aria-label="Notifications"
@@ -112,7 +112,7 @@ const Header = ({ title, subtitle, onMenuClick }) => {
           <AntBadge dot offset={[-2, 2]} color="#68bc52">
             <Bell size={18} className="text-soft-black" />
           </AntBadge>
-        </button>
+        </button> */}
 
         {/* User dropdown */}
         {user && (
