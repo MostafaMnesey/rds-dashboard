@@ -26,3 +26,11 @@ export const updateProduct = async (id, formData) => {
 export const deleteProduct = async (id) => {
   return await API.delete(`/dashboard/products/${id}`);
 };
+
+export const exportProducts = async (params) => {
+  return await API.get("/dashboard/products/export", {
+    params,
+    responseType: "blob",
+    paramsSerializer: { indexes: null },
+  });
+};

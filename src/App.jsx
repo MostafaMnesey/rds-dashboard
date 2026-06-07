@@ -23,6 +23,7 @@ const Blogs = lazy(() => import("./pages/blogs/Blogs"));
 const Banners = lazy(() => import("./pages/banners/Banners"));
 const System = lazy(() => import("./pages/system/System"));
 const Coupons = lazy(() => import("./pages/coupons/Coupons"));
+const Shipping = lazy(() => import("./pages/shipping/Shipping"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +44,7 @@ const PAGE_TITLES = {
   "/banners": "Banners",
   "/system": "System & Admins",
   "/coupons": "Coupons",
+  "/shipping": "Shipping",
 };
 
 const DashboardLayout = ({ children }) => {
@@ -129,6 +131,15 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Blogs />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/shipping"
+            element={
+              <ProtectedRoute>
+                <Shipping />
               </ProtectedRoute>
             }
           />

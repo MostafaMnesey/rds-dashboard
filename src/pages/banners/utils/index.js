@@ -56,6 +56,7 @@ export const buildBannerFormData = ({ targetType, targetId, imageFile }) => {
   const formData = new FormData();
   formData.append("targetType", targetType);
   formData.append("targetId", targetId);
+  // Image is required for create, optional for update (only sent if changed)
   if (imageFile instanceof File) {
     formData.append("image", imageFile);
   }

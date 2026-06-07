@@ -12,6 +12,15 @@ export const createBanner = async (formData) => {
   return response.data;
 };
 
+export const updateBanner = async ({ id, formData }) => {
+  const response = await API.patch(
+    `/dashboard/banners/update/${id}`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } },
+  );
+  return response.data;
+};
+
 export const deleteBanner = async (id) => {
   const response = await API.delete(`/dashboard/banners/${id}`);
   return response.data;

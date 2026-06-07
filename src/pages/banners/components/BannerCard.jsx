@@ -1,4 +1,4 @@
-import { Trash2, ExternalLink, ImageOff } from "lucide-react";
+import { Pencil, Trash2, ImageOff } from "lucide-react";
 import {
   formatDate,
   getBannerTargetImage,
@@ -8,7 +8,7 @@ import {
 } from "../utils";
 import { resolveMediaSrc, FALLBACK_IMG } from "../../../lib/media";
 
-const BannerCard = ({ banner, onDelete }) => {
+const BannerCard = ({ banner, onEdit, onDelete }) => {
   const meta = getTargetTypeMeta(banner.targetType);
   const targetImg = getBannerTargetImage(banner);
   const targetTitle = getBannerTargetTitle(banner);
@@ -44,15 +44,25 @@ const BannerCard = ({ banner, onDelete }) => {
           </span>
         </div>
 
-        {/* Delete button */}
-        <button
-          type="button"
-          onClick={() => onDelete(banner)}
-          aria-label="Delete banner"
-          className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/90 text-red-600 opacity-0 shadow-rds-sm backdrop-blur transition hover:bg-white group-hover:opacity-100"
-        >
-          <Trash2 size={16} />
-        </button>
+        {/* Action buttons */}
+        <div className="absolute right-3 top-3 flex items-center gap-2 opacity-100 transition lg:opacity-0 lg:group-hover:opacity-100">
+          <button
+            type="button"
+            onClick={() => onEdit(banner)}
+            aria-label="Edit banner"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/90 text-soft-black shadow-rds-sm backdrop-blur transition hover:bg-white active:scale-95"
+          >
+            <Pencil size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete(banner)}
+            aria-label="Delete banner"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/90 text-red-600 shadow-rds-sm backdrop-blur transition hover:bg-white active:scale-95"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Target info */}

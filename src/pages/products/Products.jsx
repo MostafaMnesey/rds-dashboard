@@ -1,11 +1,12 @@
 import { useState, useCallback } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Download } from "lucide-react";
 import { PageHeader, Button } from "../../components/ui";
 import ProductsFilters from "./components/ProductsFilters";
 import ProductsTable from "./components/ProductsTable";
 import ProductFormDrawer from "./components/ProductFormDrawer";
 import { useProducts } from "./useProducts";
 import { useDeleteProduct } from "./useProductMutations";
+import { useExportProducts } from "./useExportProducts";
 
 const Products = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -22,6 +23,7 @@ const Products = () => {
   } = useProducts();
 
   const deleteMutation = useDeleteProduct();
+  const exportMutation = useExportProducts();
 
   const handleCreate = useCallback(() => {
     setSelectedProduct(null);
@@ -43,6 +45,16 @@ const Products = () => {
     [deleteMutation],
   );
 
+  const handleExport = useCallback(() => {
+    // Send the same active filters so the export matches what the user sees
+    exportMutation.mutate({
+      search: filters.search || undefined,
+      brand: filters.brand || undefined,
+      stockStatus: filters.stockStatus || undefined,
+      isOnSale: filters.isOnSale || undefined,
+    });
+  }, [exportMutation, filters]);
+
   return (
     <>
       <PageHeader
@@ -53,9 +65,19 @@ const Products = () => {
             : "Manage your product catalog"
         }
         actions={
-          <Button icon={Plus} onClick={handleCreate}>
-            Add Product
-          </Button>
+          <>
+            <Button
+              variant="secondary"
+              icon={Download}
+              onClick={handleExport}
+              loading={exportMutation.isPending}
+            >
+              Export
+            </Button>
+            <Button icon={Plus} onClick={handleCreate}>
+              Add Product
+            </Button>
+          </>
         }
       />
 

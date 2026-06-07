@@ -6,9 +6,10 @@ import { Drawer } from "antd";
 import { Check, Loader2 } from "lucide-react";
 import BannerImageUpload from "./BannerImageUpload";
 import BannerTargetSelect from "./BannerTargetSelect";
-import { useCreateBanner } from "../useBannerMutations";
+import { useCreateBanner, useUpdateBanner } from "../useBannerMutations";
 import { buildBannerFormData } from "../utils";
 import { TARGET_TYPES } from "../data/constants";
+import { resolveMediaSrc } from "../../../lib/media";
 
 const schema = z.object({
   targetType: z.enum(["product", "category"]),
@@ -20,12 +21,15 @@ const defaults = {
   targetId: "",
 };
 
-const BannerFormDrawer = ({ open, onClose }) => {
+const BannerFormDrawer = ({ open, onClose, banner }) => {
+  const isEdit = Boolean(banner);
+
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
   const createMutation = useCreateBanner();
-  const isSubmitting = createMutation.isPending;
+  const updateMutation = useUpdateBanner();
+  const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
   const {
     control,
@@ -41,18 +45,31 @@ const BannerFormDrawer = ({ open, onClose }) => {
 
   const targetType = watch("targetType");
 
+  // Initialize form on open (create or edit)
   useEffect(() => {
-    if (open) {
+    if (!open) return;
+
+    if (isEdit) {
+      reset({
+        targetType: banner.targetType || "product",
+        targetId: banner.targetId || banner.target?.id || "",
+      });
+      setImageFile(null);
+      setImagePreview(resolveMediaSrc(banner.image) || null);
+    } else {
       reset(defaults);
       setImageFile(null);
       setImagePreview(null);
     }
-  }, [open, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, isEdit, banner?.id]);
 
-  // Reset target id when switching target type
-  useEffect(() => {
+  // Reset target id when switching target type (only in create mode,
+  // or in edit mode if user manually changes the type)
+  const handleTargetTypeChange = (newType, fieldOnChange) => {
+    fieldOnChange(newType);
     setValue("targetId", "");
-  }, [targetType, setValue]);
+  };
 
   const handleImageChange = (file) => {
     setImageFile(file);
@@ -67,19 +84,27 @@ const BannerFormDrawer = ({ open, onClose }) => {
   };
 
   const onSubmit = async (values) => {
-    if (!imageFile) {
-      // Manual guard since image is required but not in zod schema
-      return;
-    }
+    // Image is required for create, optional for update
+    if (!isEdit && !imageFile) return;
+
     try {
-      await createMutation.mutateAsync(
-        buildBannerFormData({ ...values, imageFile }),
-      );
+      const formData = buildBannerFormData({
+        ...values,
+        imageFile, // null for unchanged image in edit → not appended
+      });
+
+      if (isEdit) {
+        await updateMutation.mutateAsync({ id: banner.id, formData });
+      } else {
+        await createMutation.mutateAsync(formData);
+      }
       onClose();
     } catch {
       // handled in hook
     }
   };
+
+  const canSubmit = isEdit ? Boolean(imagePreview) : Boolean(imageFile);
 
   return (
     <Drawer
@@ -98,10 +123,12 @@ const BannerFormDrawer = ({ open, onClose }) => {
         {/* Header */}
         <div className="border-b border-black/5 px-6 py-5">
           <h2 className="font-oswald text-2xl font-bold uppercase tracking-wide text-soft-black">
-            New Banner
+            {isEdit ? "Edit Banner" : "New Banner"}
           </h2>
           <p className="mt-1 text-sm text-secondary">
-            Upload a banner image and link it to a product or category.
+            {isEdit
+              ? "Update the banner image or change its target."
+              : "Upload a banner image and link it to a product or category."}
           </p>
         </div>
 
@@ -123,6 +150,11 @@ const BannerFormDrawer = ({ open, onClose }) => {
                 A banner image is required.
               </p>
             )}
+            {isEdit && imagePreview && !imageFile && (
+              <p className="-mt-3 text-xs text-secondary">
+                Upload a new image to replace the current one, or keep it as is.
+              </p>
+            )}
 
             {/* Target type */}
             <div>
@@ -141,7 +173,9 @@ const BannerFormDrawer = ({ open, onClose }) => {
                         <button
                           key={opt.value}
                           type="button"
-                          onClick={() => field.onChange(opt.value)}
+                          onClick={() =>
+                            handleTargetTypeChange(opt.value, field.onChange)
+                          }
                           className={`group relative flex flex-col items-start gap-1 rounded-xl border p-3.5 text-left transition ${
                             isActive
                               ? "border-main bg-main/5"
@@ -202,11 +236,11 @@ const BannerFormDrawer = ({ open, onClose }) => {
           <button
             type="submit"
             form="banner-form"
-            disabled={isSubmitting || !imagePreview}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-main px-6 text-sm font-semibold text-white shadow-rds-cta transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 hover:shadow-rds-cta-hover"
+            disabled={isSubmitting || !canSubmit}
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-main px-6 text-sm font-semibold text-white shadow-rds-cta transition hover:brightness-95 hover:shadow-rds-cta-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting && <Loader2 size={16} className="animate-spin" />}
-            Create Banner
+            {isEdit ? "Save Changes" : "Create Banner"}
           </button>
         </div>
       </div>

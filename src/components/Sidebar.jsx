@@ -12,6 +12,7 @@ import {
   LogOut,
   Tag,
   X,
+  Truck,
 } from "lucide-react";
 import { useAppStore } from "../store";
 
@@ -23,6 +24,8 @@ const NAV_LINKS = [
   { to: "/blogs", label: "Blogs", icon: BookOpen },
   { to: "/banners", label: "Banners", icon: ImageIcon },
   { to: "/system", label: "System & Admins", icon: Settings },
+  { to: "/shipping", label: "Shipping", icon: Truck },
+
   { to: "/coupons", label: "Coupons", icon: Tag },
 ];
 

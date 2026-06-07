@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Loader2, ImagePlus } from "lucide-react";
 import BannerCard from "./BannerCard";
 
-const BannersGrid = ({ banners, isLoading, onDelete, onCreate }) => {
+const BannersGrid = ({ banners, isLoading, onEdit, onDelete, onCreate }) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center rounded-2xl border border-black/5 bg-white py-24 shadow-rds-sm">
@@ -36,9 +36,14 @@ const BannersGrid = ({ banners, isLoading, onDelete, onCreate }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 animate-fade-in">
+    <div className="grid animate-fade-in grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
       {banners.map((banner) => (
-        <BannerCard key={banner.id} banner={banner} onDelete={onDelete} />
+        <BannerCard
+          key={banner.id}
+          banner={banner}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       ))}
     </div>
   );
