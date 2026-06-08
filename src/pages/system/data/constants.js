@@ -3,6 +3,7 @@ export const DEFAULT_PAGE_SIZE = 10;
 export const SYSTEM_TABS = [
   { key: "admins", label: "Admins" },
   { key: "roles", label: "Roles" },
+  { key: "site-info", label: "Site Info" },
 ];
 
 export const SUPPORTED_LANGS = [

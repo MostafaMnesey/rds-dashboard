@@ -1,11 +1,10 @@
 import { useMemo, useState } from "react";
 import ShippingHeader from "./components/ShippingHeader";
 import ShippingGrid from "./components/ShippingGrid";
-// import ShippingFormDrawer from "./components/ShippingFormDrawer"; // 👈 changed
+import ShippingFormDrawer from "./components/ShippingFormDrawer";
 import ShippingDeleteModal from "./components/ShippingDeleteModal";
 import { useShipping } from "./useShipping";
 import { normalizeShippingList, buildShippingByType } from "./utils";
-import ShippingFormDrawer from "./components/ShippingFormDrawer";
 
 const Shipping = () => {
   const { data, isLoading } = useShipping();

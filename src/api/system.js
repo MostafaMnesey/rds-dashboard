@@ -37,3 +37,12 @@ export const updateAdmin = async (id, payload) => {
 export const deleteAdmin = async (id) => {
   return await API.delete(`/dashboard/system/admins/${id}`);
 };
+
+/* ───────── Site Info ───────── */
+export const getSiteInfo = async () => {
+  return await API.get("/dashboard/site-info");
+};
+
+export const updateSiteInfo = async (payload) => {
+  return await API.patch("/dashboard/site-info", payload);
+};

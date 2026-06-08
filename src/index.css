@@ -404,3 +404,271 @@ input[type="number"] {
     font-size: 14px;
   }
 }
+
+/* ════════════════════════════════════════════════════════
+   react-phone-input-2 — RDS theme overrides
+   ════════════════════════════════════════════════════════ */
+.rds-phone-input .react-tel-input {
+  font-family: "Poppins", system-ui, sans-serif;
+}
+
+/* Main input */
+.rds-phone-input .rds-phone-input__input {
+  width: 100% !important;
+  height: 44px !important;
+  padding-left: 52px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12px !important;
+  background-color: #ffffff !important;
+  font-size: 14px !important;
+  color: #2d2d2d !important;
+  outline: none !important;
+  transition: all 0.15s ease !important;
+}
+
+.rds-phone-input .rds-phone-input__input:focus {
+  border-color: #68bc52 !important;
+  box-shadow: 0 0 0 2px rgba(104, 188, 82, 0.15) !important;
+}
+
+.rds-phone-input .rds-phone-input__input::placeholder {
+  color: rgba(147, 151, 154, 0.6);
+}
+
+.rds-phone-input .rds-phone-input__input:disabled {
+  background-color: #fafaf9 !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Country selector button */
+.rds-phone-input .rds-phone-input__button {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-right: none !important;
+  border-top-left-radius: 12px !important;
+  border-bottom-left-radius: 12px !important;
+  background-color: #fafaf9 !important;
+  padding: 0 8px 0 12px !important;
+  transition: all 0.15s ease !important;
+}
+
+.rds-phone-input .rds-phone-input__button:hover,
+.rds-phone-input .rds-phone-input__button.open {
+  background-color: #f4f3f0 !important;
+}
+
+.rds-phone-input .rds-phone-input__button .selected-flag {
+  border-radius: 12px 0 0 12px !important;
+  padding: 0 8px 0 12px !important;
+}
+
+.rds-phone-input .rds-phone-input__button .selected-flag:hover,
+.rds-phone-input .rds-phone-input__button .selected-flag:focus {
+  background-color: transparent !important;
+}
+
+.rds-phone-input .rds-phone-input__button .selected-flag .arrow {
+  border-top-color: #93979a !important;
+  margin-left: 6px !important;
+}
+
+.rds-phone-input .rds-phone-input__button .selected-flag .arrow.up {
+  border-bottom-color: #93979a !important;
+}
+
+/* When input is focused, also style the button border */
+.rds-phone-input .rds-phone-input__input:focus + .rds-phone-input__button,
+.rds-phone-input
+  .react-tel-input:focus-within
+  .rds-phone-input__button {
+  border-color: #68bc52 !important;
+}
+
+/* Error state */
+.rds-phone-input.has-error .rds-phone-input__input,
+.rds-phone-input.has-error .rds-phone-input__button {
+  border-color: #ef4444 !important;
+}
+
+.rds-phone-input.has-error .rds-phone-input__input:focus {
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Dropdown */
+.rds-phone-input .rds-phone-input__dropdown {
+  margin-top: 6px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  background-color: #ffffff !important;
+  width: 320px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  font-family: "Poppins", system-ui, sans-serif !important;
+}
+
+.rds-phone-input .rds-phone-input__dropdown .country {
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  color: #2d2d2d !important;
+  transition: background-color 0.1s ease !important;
+}
+
+.rds-phone-input .rds-phone-input__dropdown .country:hover,
+.rds-phone-input .rds-phone-input__dropdown .country.highlight {
+  background-color: rgba(104, 188, 82, 0.08) !important;
+  color: #2d2d2d !important;
+}
+
+.rds-phone-input .rds-phone-input__dropdown .country .dial-code {
+  color: #93979a !important;
+}
+
+.rds-phone-input .rds-phone-input__dropdown .country-name {
+  margin-right: 6px !important;
+}
+
+/* Search box inside dropdown */
+.rds-phone-input .rds-phone-input__search {
+  padding: 10px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  background-color: #ffffff !important;
+}
+
+.rds-phone-input .rds-phone-input__search input {
+  width: 100% !important;
+  height: 36px !important;
+  padding: 0 12px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  font-family: "Poppins", system-ui, sans-serif !important;
+  outline: none !important;
+}
+
+.rds-phone-input .rds-phone-input__search input:focus {
+  border-color: #68bc52 !important;
+  box-shadow: 0 0 0 2px rgba(104, 188, 82, 0.15) !important;
+}
+
+/* Mobile zoom fix */
+@media (max-width: 768px) {
+  .rds-phone-input .rds-phone-input__input,
+  .rds-phone-input .rds-phone-input__search input {
+    font-size: 16px !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   AntD TimePicker — RDS theme overrides
+   ════════════════════════════════════════════════════════ */
+.rds-time-picker.ant-picker {
+  height: 40px !important;
+  width: 110px !important;
+  border-radius: 12px !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  background-color: #ffffff !important;
+  padding: 0 12px !important;
+  font-family: "Poppins", system-ui, sans-serif !important;
+  transition: all 0.15s ease !important;
+}
+
+.rds-time-picker.ant-picker:hover {
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.rds-time-picker.ant-picker-focused,
+.rds-time-picker.ant-picker.ant-picker-focused {
+  border-color: #68bc52 !important;
+  box-shadow: 0 0 0 2px rgba(104, 188, 82, 0.15) !important;
+}
+
+.rds-time-picker.ant-picker .ant-picker-input > input {
+  font-size: 14px !important;
+  color: #2d2d2d !important;
+  font-weight: 500 !important;
+  font-family: "Poppins", system-ui, sans-serif !important;
+  text-align: center !important;
+}
+
+.rds-time-picker.ant-picker .ant-picker-input > input::placeholder {
+  color: rgba(147, 151, 154, 0.6) !important;
+}
+
+.rds-time-picker.ant-picker.ant-picker-disabled {
+  background-color: #fafaf9 !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Dropdown popup */
+.rds-time-picker-popup .ant-picker-panel-container {
+  border-radius: 14px !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  overflow: hidden !important;
+  font-family: "Poppins", system-ui, sans-serif !important;
+}
+
+.rds-time-picker-popup .ant-picker-time-panel-column {
+  padding: 4px 0 !important;
+}
+
+.rds-time-picker-popup
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell {
+  margin: 0 4px !important;
+}
+
+.rds-time-picker-popup
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell
+  .ant-picker-time-panel-cell-inner {
+  border-radius: 8px !important;
+  color: #2d2d2d !important;
+  font-weight: 500 !important;
+  transition: background-color 0.1s ease !important;
+}
+
+.rds-time-picker-popup
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell:hover
+  .ant-picker-time-panel-cell-inner {
+  background-color: rgba(104, 188, 82, 0.08) !important;
+  color: #000 !important;
+}
+
+.rds-time-picker-popup
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner {
+  background-color: #68bc52 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Footer (Now / OK buttons) */
+.rds-time-picker-popup .ant-picker-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+  padding: 8px 12px !important;
+}
+
+.rds-time-picker-popup .ant-picker-now-btn {
+  color: #68bc52 !important;
+  font-weight: 600 !important;
+}
+
+.rds-time-picker-popup .ant-picker-ok .ant-btn-primary {
+  background-color: #68bc52 !important;
+  border-color: #68bc52 !important;
+  border-radius: 8px !important;
+  height: 28px !important;
+  font-weight: 600 !important;
+}
+
+/* when i hover active make text color*/
+
+.rds-time-picker-popup .ant-picker-ok .ant-btn-primary:hover {
+  background-color: #5aa845 !important;
+  border-color: #5aa845 !important;
+}

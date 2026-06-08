@@ -1,11 +1,11 @@
 import { memo } from "react";
-import { Settings, Shield, Users } from "lucide-react";
+import { Shield, Users, Globe } from "lucide-react";
 import { SYSTEM_TABS } from "../data/constants";
 
 const TAB_ICONS = {
-//   overview: Settings,
   admins: Users,
   roles: Shield,
+  "site-info": Globe,
 };
 
 const SystemTabs = ({ active, onChange }) => {
@@ -19,11 +19,10 @@ const SystemTabs = ({ active, onChange }) => {
             key={tab.key}
             type="button"
             onClick={() => onChange(tab.key)}
-            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
-              isActive
+            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${isActive
                 ? "bg-main text-white shadow-rds-cta"
                 : "text-secondary hover:bg-black/[0.03] hover:text-soft-black"
-            }`}
+              }`}
           >
             {Icon && <Icon size={15} />}
             {tab.label}
