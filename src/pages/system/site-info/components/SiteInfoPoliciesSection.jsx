@@ -8,7 +8,7 @@ import { PAYMENT_METHODS } from "../data/constants";
 
 const PaymentMethodChip = ({ method, selected, onToggle }) => {
     const Icon = method.icon;
-    return (
+    return ( 
         <button
             type="button"
             onClick={onToggle}
