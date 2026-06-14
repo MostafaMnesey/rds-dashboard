@@ -46,3 +46,7 @@ export const getSiteInfo = async () => {
 export const updateSiteInfo = async (payload) => {
   return await API.patch("/dashboard/site-info", payload);
 };
+
+export const toggleCod = async () => {
+  return await API.patch("/dashboard/site-info/toggle-cod");
+};

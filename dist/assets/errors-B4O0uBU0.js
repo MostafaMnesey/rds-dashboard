@@ -1,1 +1,0 @@
-var e=(e,t=`Something went wrong`)=>{let n=e?.response?.data;return Array.isArray(n?.errors)&&n.errors.length>0?n.errors[0]:n?.error?n.error:n?.message?n.message:e?.message&&e.message!==`Network Error`?e.message:t},t=(e,t=`Success`)=>typeof e?.message==`string`?e.message:typeof e?.message==`object`&&(e.message.en||e.message.ar)||t;export{t as n,e as t};

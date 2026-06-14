@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Loader2, Save, RotateCcw } from "lucide-react";
 
 import { useSiteInfo } from "./useSiteInfo";
-import { useUpdateSiteInfo } from "./useSiteInfoMutations";
+import { useUpdateSiteInfo, useToggleCod } from "./useSiteInfoMutations";
 import {
     SITE_INFO_DEFAULTS,
     mapSiteInfoToForm,
@@ -98,7 +98,9 @@ const schema = z.object({
 const SiteInfoTab = () => {
     const { data: siteInfo, isLoading } = useSiteInfo();
     const updateMutation = useUpdateSiteInfo();
+    const toggleCodMutation = useToggleCod();
     const isSubmitting = updateMutation.isPending;
+    const isTogglingCod = toggleCodMutation.isPending;
 
     const defaultValues = useMemo(
         () => (siteInfo ? mapSiteInfoToForm(siteInfo) : SITE_INFO_DEFAULTS),
@@ -118,10 +120,10 @@ const SiteInfoTab = () => {
     });
 
     useEffect(() => {
-        if (siteInfo) {
+        if (siteInfo && !isDirty) {
             reset(mapSiteInfoToForm(siteInfo));
         }
-    }, [siteInfo, reset]);
+    }, [siteInfo, reset, isDirty]);
 
     const onSubmit = async (values) => {
         const payload = buildSiteInfoPayload(values);
@@ -131,6 +133,10 @@ const SiteInfoTab = () => {
         } catch {
             // handled in mutation hook
         }
+    };
+
+    const handleToggleCod = () => {
+        toggleCodMutation.mutate();
     };
 
     const handleReset = () => {
@@ -155,7 +161,13 @@ const SiteInfoTab = () => {
                 setValue={setValue}
                 getValues={getValues}
             />
-            <SiteInfoPoliciesSection control={control} errors={errors} />
+            <SiteInfoPoliciesSection
+                control={control}
+                errors={errors}
+                codOpen={Boolean(siteInfo?.codOpen)}
+                onToggleCod={handleToggleCod}
+                isTogglingCod={isTogglingCod}
+            />
 
             <SiteInfoShippingNote />
 

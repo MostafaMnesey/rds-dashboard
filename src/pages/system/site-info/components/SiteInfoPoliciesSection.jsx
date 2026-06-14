@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Controller } from "react-hook-form";
 import { ShieldCheck, Check } from "lucide-react";
+import { Switch } from "antd";
 import Input from "../../../../components/ui/Input";
 import SiteInfoSection from "./SiteInfoSection";
 import { PAYMENT_METHODS } from "../data/constants";
@@ -27,13 +28,29 @@ const PaymentMethodChip = ({ method, selected, onToggle }) => {
     );
 };
 
-const SiteInfoPoliciesSection = ({ control, errors }) => {
+const SiteInfoPoliciesSection = ({ control, errors, codOpen, onToggleCod, isTogglingCod }) => {
     return (
         <SiteInfoSection
             icon={ShieldCheck}
             title="Policies & Payment"
             description="Return policy, warranty terms and accepted payment methods."
         >
+            <div className="flex items-center justify-between rounded-xl border border-black/5 bg-[#fafaf9] p-4">
+                <div className="space-y-0.5">
+                    <span className="block text-sm font-semibold text-soft-black">
+                        Cash on Delivery (COD)
+                    </span>
+                    <span className="block text-xs text-secondary">
+                        Enable or disable the Cash on Delivery payment option on checkout for customers.
+                    </span>
+                </div>
+                <Switch
+                    checked={codOpen}
+                    onChange={onToggleCod}
+                    loading={isTogglingCod}
+                />
+            </div>
+
             <Controller
                 name="extraInfo.returnPolicy"
                 control={control}
