@@ -9,18 +9,13 @@ export const getShippingTypeMeta = (type) =>
     dot: "bg-secondary",
   };
 
-/**
- * Normalize API response (handles array OR { items } shape)
- */
 export const normalizeShippingList = (data) => {
   if (Array.isArray(data)) return data;
   if (Array.isArray(data?.items)) return data.items;
+  if (Array.isArray(data?.data?.items)) return data.data.items;
   return [];
 };
 
-/**
- * Build a map of { inside: method | null, outside: method | null }
- */
 export const buildShippingByType = (list) => {
   const map = { inside: null, outside: null };
   list.forEach((item) => {
@@ -31,9 +26,6 @@ export const buildShippingByType = (list) => {
   return map;
 };
 
-/**
- * Returns array of types that are NOT yet configured
- */
 export const getAvailableTypes = (byType) =>
   SHIPPING_TYPE_OPTIONS.filter((opt) => !byType[opt.value]);
 
@@ -59,10 +51,8 @@ export const formatDate = (dateString) => {
   }
 };
 
-/**
- * Build payload for create/update
- */
-export const buildShippingPayload = ({ type, price }) => ({
+export const buildShippingPayload = ({ type, price, freeAboveOrder }) => ({
   type,
-  price: String(price),
+  price: String(price ?? 0),
+  freeAboveOrder: String(freeAboveOrder ?? 0),
 });

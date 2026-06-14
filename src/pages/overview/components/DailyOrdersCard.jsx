@@ -32,7 +32,17 @@ const Stat = ({ label, value, icon: Icon, tone = "soft" }) => {
   );
 };
 
-const DailyOrdersCard = ({ daily, day, date, onDayChange, onDateChange }) => {
+const DailyOrdersCard = ({
+
+  daily,
+  day,
+  date,
+  startDate,
+  endDate,
+  onDayChange,
+  onDateChange,
+  onRangeChange,
+}) => {
   const selected = extractDailyData(daily);
 
   return (
@@ -52,8 +62,11 @@ const DailyOrdersCard = ({ daily, day, date, onDayChange, onDateChange }) => {
         <DailyDateFilter
           day={day}
           date={date}
+          startDate={startDate}
+          endDate={endDate}
           onDayChange={onDayChange}
           onDateChange={onDateChange}
+          onRangeChange={onRangeChange}
         />
       </div>
 

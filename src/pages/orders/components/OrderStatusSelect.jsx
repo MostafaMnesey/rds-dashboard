@@ -27,8 +27,10 @@ const OrderStatusSelect = ({
         loading={loading}
         disabled={loading}
         options={ORDER_STATUSES}
+        getPopupContainer={() => document.body}
+        popupMatchSelectWidth={false}
         style={{ width: 130 }}
-        getPopupContainer={(trigger) => trigger.parentNode}
+        // getPopupContainer={(trigger) => trigger.parentNode}
         dropdownRender={(menu) => (
           <div onClick={stop} onMouseDown={stop}>
             {menu}

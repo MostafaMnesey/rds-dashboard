@@ -41,5 +41,6 @@ export const DAY_PRESETS = [
   { value: "yesterday", label: "Yesterday" },
 ];
 
-/* Special value when user picks a custom date instead of a preset */
-export const CUSTOM_DAY = "custom";
+/* Filter modes */
+export const CUSTOM_DAY = "custom";   // single date
+export const RANGE_DAY = "range";     // startDate + endDate

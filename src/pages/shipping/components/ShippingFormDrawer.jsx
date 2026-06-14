@@ -14,10 +14,14 @@ import {
 
 const schema = z.object({
   type: z.enum(["inside", "outside"]),
-  price: z
+  price: z.coerce
     .number({ invalid_type_error: "Price is required" })
     .min(0, "Price cannot be negative")
     .max(1_000_000, "Price is too large"),
+  freeAboveOrder: z.coerce
+    .number({ invalid_type_error: "Free above order is required" })
+    .min(0, "Free above order cannot be negative")
+    .max(1_000_000, "Value is too large"),
 });
 
 const buildDefaults = (method, presetType) => ({
@@ -26,6 +30,10 @@ const buildDefaults = (method, presetType) => ({
     typeof method?.price === "number"
       ? method.price
       : Number(method?.price) || 0,
+  freeAboveOrder:
+    typeof method?.freeAboveOrder === "number"
+      ? method.freeAboveOrder
+      : Number(method?.freeAboveOrder) || 0,
 });
 
 const ShippingFormDrawer = ({ open, onClose, method, presetType }) => {
@@ -52,6 +60,7 @@ const ShippingFormDrawer = ({ open, onClose, method, presetType }) => {
 
   const watchedType = watch("type");
   const watchedPrice = watch("price");
+  const watchedFreeAboveOrder = watch("freeAboveOrder");
   const meta = getShippingTypeMeta(watchedType);
   const Icon = meta.icon;
 
@@ -64,9 +73,7 @@ const ShippingFormDrawer = ({ open, onClose, method, presetType }) => {
         await createMutation.mutateAsync(payload);
       }
       onClose();
-    } catch {
-      // handled in hook
-    }
+    } catch { }
   };
 
   return (
@@ -83,26 +90,23 @@ const ShippingFormDrawer = ({ open, onClose, method, presetType }) => {
       }}
     >
       <div className="flex h-full flex-col">
-        {/* Header */}
         <div className="border-b border-black/5 px-6 py-5">
           <h2 className="font-oswald text-2xl font-bold uppercase tracking-wide text-soft-black">
             {isEdit ? "Edit Shipping" : "New Shipping"}
           </h2>
           <p className="mt-1 text-sm text-secondary">
             {isEdit
-              ? "Update the shipping price for this method."
-              : `Set the shipping price for ${meta.label.toLowerCase()}.`}
+              ? "Update the shipping settings for this method."
+              : `Set the shipping settings for ${meta.label.toLowerCase()}.`}
           </p>
         </div>
 
-        {/* Body */}
         <div className="flex-1 overflow-y-auto px-6 py-6">
           <form
             id="shipping-form"
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-5"
           >
-            {/* Type display (locked) */}
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-secondary">
                 Shipping Type
@@ -127,12 +131,8 @@ const ShippingFormDrawer = ({ open, onClose, method, presetType }) => {
                   Locked
                 </span>
               </div>
-              <p className="mt-1.5 text-xs text-secondary">
-                The shipping type cannot be changed after selection.
-              </p>
             </div>
 
-            {/* Price */}
             <Controller
               name="price"
               control={control}
@@ -157,11 +157,34 @@ const ShippingFormDrawer = ({ open, onClose, method, presetType }) => {
               )}
             />
 
-            {/* Preview card */}
+            <Controller
+              name="freeAboveOrder"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  type="number"
+                  label="Free Shipping Above Order"
+                  min={0}
+                  step="0.01"
+                  placeholder="0.00"
+                  hint="Set 0 to disable free shipping for this method."
+                  {...field}
+                  onChange={(val) => field.onChange(val ?? 0)}
+                  error={errors?.freeAboveOrder?.message}
+                  suffix={
+                    <span className="text-xs font-semibold uppercase tracking-[0.14em] text-secondary">
+                      AED
+                    </span>
+                  }
+                />
+              )}
+            />
+
             <div className="rounded-2xl border border-dashed border-main/40 bg-main/[0.04] p-4">
               <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-main">
                 Preview
               </p>
+
               <div className="flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
                   <div
@@ -174,10 +197,13 @@ const ShippingFormDrawer = ({ open, onClose, method, presetType }) => {
                       {meta.label}
                     </p>
                     <p className="truncate text-xs text-secondary">
-                      Shipping option
+                      {Number(watchedFreeAboveOrder) > 0
+                        ? `Free above ${formatShippingPrice(watchedFreeAboveOrder)}`
+                        : "No free shipping threshold"}
                     </p>
                   </div>
                 </div>
+
                 <div className="shrink-0 text-right">
                   <p className="font-oswald text-2xl font-bold text-main">
                     {formatShippingPrice(watchedPrice || 0)}
@@ -188,7 +214,6 @@ const ShippingFormDrawer = ({ open, onClose, method, presetType }) => {
           </form>
         </div>
 
-        {/* Footer */}
         <div className="flex items-center justify-end gap-3 border-t border-black/5 bg-[#fafaf9] px-6 py-4">
           <button
             type="button"

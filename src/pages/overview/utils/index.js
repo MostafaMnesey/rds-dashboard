@@ -72,13 +72,55 @@ export const getInitials = (name = "") => {
     .join("")
     .toUpperCase() || "?";
 };
-
 export const extractDailyData = (dailyOrders) => {
   if (!dailyOrders || typeof dailyOrders !== "object") return null;
-  return (
-    dailyOrders.selected ||
-    dailyOrders.today ||
-    dailyOrders.yesterday ||
-    null
+
+  // Legacy preset shapes (single-day responses)
+  if (dailyOrders.selected) return dailyOrders.selected;
+  if (dailyOrders.today) return dailyOrders.today;
+  if (dailyOrders.yesterday) return dailyOrders.yesterday;
+
+  // New shape: object keyed by date strings (e.g. "2026-06-13": { ... })
+  // — happens for `?date=...` and `?startDate=...&endDate=...`
+  const entries = Object.entries(dailyOrders).filter(
+    ([key, val]) =>
+      /^\d{4}-\d{2}-\d{2}$/.test(key) && val && typeof val === "object",
   );
+
+  if (entries.length === 0) return null;
+
+  // Single day → return it as-is
+  if (entries.length === 1) {
+    return entries[0][1];
+  }
+
+  // Range → sum everything up and return an aggregated object
+  const aggregated = entries.reduce(
+    (acc, [, day]) => {
+      acc.ordersCount += Number(day.ordersCount) || 0;
+      acc.salesValue += Number(day.salesValue) || 0;
+      acc.cancelledOrdersCount += Number(day.cancelledOrdersCount) || 0;
+      acc.cancelledSalesValue += Number(day.cancelledSalesValue) || 0;
+      acc.netSalesValue += Number(day.netSalesValue) || 0;
+      return acc;
+    },
+    {
+      ordersCount: 0,
+      salesValue: 0,
+      cancelledOrdersCount: 0,
+      cancelledSalesValue: 0,
+      netSalesValue: 0,
+    },
+  );
+
+  // Sort entries by date and grab first/last for range label
+  const sorted = entries.map(([k]) => k).sort();
+  aggregated.startDate = sorted[0];
+  aggregated.endDate = sorted[sorted.length - 1];
+  aggregated.daysCount = entries.length;
+  aggregated.breakdown = entries
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([date, val]) => ({ date, ...val }));
+
+  return aggregated;
 };

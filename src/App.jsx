@@ -24,6 +24,7 @@ const Banners = lazy(() => import("./pages/banners/Banners"));
 const System = lazy(() => import("./pages/system/System"));
 const Coupons = lazy(() => import("./pages/coupons/Coupons"));
 const Shipping = lazy(() => import("./pages/shipping/Shipping"));
+const WhatsAppCustomers = lazy(() => import("./pages/whatsapp-customers/WhatsAppCustomers"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +46,8 @@ const PAGE_TITLES = {
   "/system": "System & Admins",
   "/coupons": "Coupons",
   "/shipping": "Shipping",
+  "/whatsapp-customers": "WhatsApp Customers",
+
 };
 
 const DashboardLayout = ({ children }) => {
@@ -123,6 +126,15 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Orders />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/whatsapp-customers"
+            element={
+              <ProtectedRoute>
+                <WhatsAppCustomers />
               </ProtectedRoute>
             }
           />

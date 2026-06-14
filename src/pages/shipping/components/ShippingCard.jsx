@@ -9,11 +9,9 @@ const ShippingCard = ({ type, method, onEdit, onDelete, onCreate }) => {
 
   return (
     <div
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white shadow-rds-sm transition hover:shadow-rds-md ${
-        isConfigured ? "border-black/5" : "border-dashed border-black/15"
-      }`}
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white shadow-rds-sm transition hover:shadow-rds-md ${isConfigured ? "border-black/5" : "border-dashed border-black/15"
+        }`}
     >
-      {/* Header */}
       <div className="flex items-start gap-4 p-6">
         <div
           className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${meta.accent}`}
@@ -37,7 +35,6 @@ const ShippingCard = ({ type, method, onEdit, onDelete, onCreate }) => {
         </div>
       </div>
 
-      {/* Body */}
       <div className="border-t border-black/5 bg-[#fafaf9] px-6 py-5">
         {isConfigured ? (
           <div className="flex items-end justify-between gap-4">
@@ -47,6 +44,12 @@ const ShippingCard = ({ type, method, onEdit, onDelete, onCreate }) => {
               </p>
               <p className="mt-1 font-oswald text-3xl font-bold tracking-tight text-soft-black">
                 {formatShippingPrice(method.price)}
+              </p>
+
+              <p className="mt-2 text-xs text-secondary">
+                {Number(method.freeAboveOrder) > 0
+                  ? `Free above ${formatShippingPrice(method.freeAboveOrder)}`
+                  : "No free shipping threshold"}
               </p>
             </div>
 

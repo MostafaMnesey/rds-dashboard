@@ -19,3 +19,7 @@ export const updateOrderStatus = async ({ id, status }) => {
 export const deleteOrder = async (id) => {
   return await API.delete(`/dashboard/orders/${id}`);
 };
+
+export const createManualOrder = async (payload) => {
+  return await API.post("/dashboard/orders/manual", payload);
+};
