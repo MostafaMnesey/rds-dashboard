@@ -22,7 +22,7 @@ const NAV_LINKS = [
   { to: "/products", label: "Products", icon: Package },
   { to: "/categories", label: "Categories", icon: FolderTree },
   { to: "/orders", label: "Orders", icon: ShoppingCart },
-  { to: "/whatsapp-customers", label: "WhatsApp Customers", icon: MessageCircle },
+  { to: "/customers", label: "Customers", icon: MessageCircle },
 
   { to: "/blogs", label: "Blogs", icon: BookOpen },
   { to: "/banners", label: "Banners", icon: ImageIcon },

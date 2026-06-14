@@ -10,7 +10,7 @@ const WhatsAppCustomersHeader = ({ totalCount = 0, onCreate }) => {
                 </div>
                 <div className="min-w-0">
                     <h1 className="font-oswald text-3xl font-bold uppercase tracking-wide text-soft-black">
-                        WhatsApp Customers
+                        Customers
                     </h1>
                     <p className="mt-1 text-sm text-secondary">
                         {totalCount > 0

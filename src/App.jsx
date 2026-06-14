@@ -46,7 +46,7 @@ const PAGE_TITLES = {
   "/system": "System & Admins",
   "/coupons": "Coupons",
   "/shipping": "Shipping",
-  "/whatsapp-customers": "WhatsApp Customers",
+  "/customers": "Customers",
 
 };
 
@@ -131,7 +131,7 @@ const App = () => {
           />
 
           <Route
-            path="/whatsapp-customers"
+            path="/customers"
             element={
               <ProtectedRoute>
                 <WhatsAppCustomers />
