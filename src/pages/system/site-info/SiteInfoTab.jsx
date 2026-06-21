@@ -54,10 +54,12 @@ const schema = z.object({
     en: z.object({
         siteName: z.string().trim().min(1, "English site name is required"),
         address: z.string().optional().or(z.literal("")),
+        freeExchage: z.string().optional().or(z.literal("")),
     }),
     ar: z.object({
         siteName: z.string().trim().min(1, "Arabic site name is required"),
         address: z.string().optional().or(z.literal("")),
+        freeExchage: z.string().optional().or(z.literal("")),
     }),
     contactMethods: z
         .array(

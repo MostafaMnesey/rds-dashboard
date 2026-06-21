@@ -136,6 +136,20 @@ const SiteInfoBasicSection = ({ control, errors }) => {
                             />
                         )}
                     />
+                    <Controller
+                        name="en.freeExchage"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                type="textarea"
+                                rows={2}
+                                label="Free Exchange Policy"
+                                placeholder="e.g. Free exchange against manufacturing defects within 14 days of purchase."
+                                {...field}
+                                error={errors?.en?.freeExchage?.message}
+                            />
+                        )}
+                    />
                 </div>
 
                 {/* AR fields */}
@@ -165,6 +179,20 @@ const SiteInfoBasicSection = ({ control, errors }) => {
                                 placeholder="المحل 2، بناية سالم العويس، الشارقة، الإمارات"
                                 {...field}
                                 error={errors?.ar?.address?.message}
+                            />
+                        )}
+                    />
+                    <Controller
+                        name="ar.freeExchage"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                type="textarea"
+                                rows={2}
+                                label="سياسة الاستبدال المجاني"
+                                placeholder="مثال: استبدال مجاني في حالة وجود عيوب تصنيعية خلال 14 يومًا من تاريخ الشراء."
+                                {...field}
+                                error={errors?.ar?.freeExchage?.message}
                             />
                         )}
                     />

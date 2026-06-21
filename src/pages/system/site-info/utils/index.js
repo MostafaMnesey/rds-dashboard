@@ -19,10 +19,12 @@ export const SITE_INFO_DEFAULTS = {
   en: {
     siteName: "",
     address: "",
+    freeExchage: "",
   },
   ar: {
     siteName: "",
     address: "",
+    freeExchage: "",
   },
   contactMethods: [],
   socialLinks: { ...DEFAULT_SOCIAL_LINKS },
@@ -79,10 +81,12 @@ export const mapSiteInfoToForm = (data) => {
     en: {
       siteName: enTr?.siteName ?? data.en?.siteName ?? "",
       address: enTr?.address ?? data.en?.address ?? "",
+      freeExchage: enTr?.freeExchage ?? data.en?.freeExchage ?? "",
     },
     ar: {
       siteName: arTr?.siteName ?? data.ar?.siteName ?? "",
       address: arTr?.address ?? data.ar?.address ?? "",
+      freeExchage: arTr?.freeExchage ?? data.ar?.freeExchage ?? "",
     },
     contactMethods: Array.isArray(data.contactMethods)
       ? data.contactMethods.map((m) => ({
@@ -151,10 +155,12 @@ export const buildSiteInfoPayload = (values) => {
     en: {
       siteName: trim(values.en?.siteName) || "",
       address: trim(values.en?.address) || "",
+      freeExchage: trim(values.en?.freeExchage) || "",
     },
     ar: {
       siteName: trim(values.ar?.siteName) || "",
       address: trim(values.ar?.address) || "",
+      freeExchage: trim(values.ar?.freeExchage) || "",
     },
     contactMethods,
     socialLinks,
