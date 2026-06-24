@@ -1,8 +1,8 @@
 export const ORDER_STATUSES = [
   { value: "PENDING", label: "Pending" },
-  { value: "PAID", label: "Paid" },
-  { value: "FAILED", label: "Failed" },
-  { value: "REFUNDED", label: "Refunded" },
+  { value: "FULFILLED", label: "Fulfilled" },
+  { value: "SHIPPED", label: "Shipped" },
+  { value: "RETURNED", label: "Returned" },
   { value: "CANCELLED", label: "Cancelled" },
 ];
 
@@ -11,49 +11,70 @@ export const STATUS_FILTER_OPTIONS = [
   ...ORDER_STATUSES,
 ];
 
+export const ORDER_PAYMENT_STATUSES = [
+  { value: "PENDING", label: "Pending" },
+  { value: "PAID", label: "Paid" },
+  { value: "UNPAID", label: "Unpaid" },
+  { value: "REFUNDED", label: "Refunded" },
+];
+
+export const PAYMENT_STATUS_FILTER_OPTIONS = [
+  { value: "", label: "All Payment Statuses" },
+  ...ORDER_PAYMENT_STATUSES,
+];
+
+export const SHIPPING_TYPE_OPTIONS = [
+  { value: "", label: "All Shipping Types" },
+  { value: "inside", label: "Inside UAE" },
+  { value: "outside", label: "Outside UAE" },
+];
+
 export const DAY_OPTIONS = [
   { value: "today", label: "Today" },
   { value: "yesterday", label: "Yesterday" },
 ];
 
-/**
- * Payment type mapping:
- *  - backend value: "manual"  → display: "COD"
- *  - backend value: "stripe"  → display: "Payment"
- */
-export const PAYMENT_TYPES = [
-  { value: "manual", label: "COD" },
-  { value: "stripe", label: "Payment" },
-];
-
-export const PAYMENT_TYPE_FILTER_OPTIONS = [
-  { value: "", label: "All Types" },
-  ...PAYMENT_TYPES,
-];
-
-export const PAYMENT_TYPE_LABELS = {
-  manual: "COD",
-  stripe: "Payment",
-};
-
 export const STATUS_VARIANTS = {
   PENDING: "warning",
-  PAID: "success",
-  FAILED: "danger",
-  REFUNDED: "info",
-  CANCELLED: "neutral",
+  FULFILLED: "success",
+  SHIPPED: "info",
+  RETURNED: "neutral",
+  CANCELLED: "danger",
 };
 
 export const PAYMENT_STATUS_VARIANTS = {
-  succeeded: "success",
-  pending: "warning",
-  failed: "danger",
-  refunded: "info",
+  PENDING: "warning",
+  PAID: "success",
+  UNPAID: "neutral",
+  REFUNDED: "info",
 };
 
-export const PAYMENT_TYPE_VARIANTS = {
-  manual: "neutral",
+export const PAYMENT_STATUS_LABELS = {
+  PENDING: "Pending",
+  PAID: "Paid",
+  UNPAID: "Unpaid",
+  REFUNDED: "Refunded",
+};
+
+export const SHIPPING_TYPE_VARIANTS = {
+  inside: "success",
+  outside: "info",
+};
+
+export const SHIPPING_TYPE_LABELS = {
+  inside: "Inside UAE",
+  outside: "Outside UAE",
+};
+
+/* ✅ display only — مش فلتر */
+export const PAYMENT_PROVIDER_LABELS = {
+  stripe: "Stripe",
+  cod: "Cash on Delivery",
+};
+
+export const PAYMENT_PROVIDER_VARIANTS = {
   stripe: "info",
+  cod: "neutral",
 };
 
 export const DEFAULT_PAGE_SIZE = 10;

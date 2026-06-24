@@ -4,7 +4,12 @@ import { DataTable, Badge } from "../../../components/ui";
 import OrderStatusSelect from "./OrderStatusSelect";
 import OrderRowActions from "./OrderRowActions";
 import { formatCurrency, formatDateTime, shortId } from "../utils/formatters";
-import { PAYMENT_TYPE_LABELS, PAYMENT_TYPE_VARIANTS } from "../data/constants";
+import {
+  PAYMENT_STATUS_LABELS,
+  PAYMENT_STATUS_VARIANTS,
+  SHIPPING_TYPE_LABELS,
+  SHIPPING_TYPE_VARIANTS,
+} from "../data/constants";
 
 const OrdersTable = ({
   items,
@@ -17,6 +22,10 @@ const OrdersTable = ({
   onDelete,
   updatingId,
   deletingId,
+  // ↓ optional — للـ reuse في صفحات تانية
+  emptyTitle = "No orders match your filters",
+  emptyDescription = "Try adjusting filters or come back later.",
+  emptyIcon = Inbox,
 }) => {
   const columns = useMemo(
     () => [
@@ -36,15 +45,23 @@ const OrdersTable = ({
         dataIndex: "guestEmail",
         key: "customer",
         render: (email, record) => {
-          const name =
-            record?.shippingAddress?.firstName || record?.user?.name || "Guest";
+          const firstName = record?.shippingAddress?.firstName || "";
+          const lastName = record?.shippingAddress?.lastName || "";
+          const fullName =
+            [firstName, lastName].filter(Boolean).join(" ") ||
+            record?.user?.name ||
+            "Guest";
+
           return (
             <div className="flex flex-col">
               <span className="text-sm font-semibold text-soft-black">
-                {name}
+                {fullName}
               </span>
-              <span className="truncate text-xs text-secondary max-w-[220px]">
-                {email || record?.user?.email || "—"}
+              <span className="max-w-[220px] truncate text-xs text-secondary">
+                {email ||
+                  record?.user?.email ||
+                  record?.shippingAddress?.phone ||
+                  "—"}
               </span>
             </div>
           );
@@ -63,19 +80,37 @@ const OrdersTable = ({
         ),
       },
       {
-        title: "Type",
-        key: "type",
-        width: 110,
+        title: "Payment",
+        key: "paymentStatus",
+        width: 140,
         render: (_, record) => {
-          const provider = record?.payments?.[0]?.provider;
-          if (!provider)
+          const paymentStatus = record?.payments?.[0]?.status;
+          if (!paymentStatus)
             return <span className="text-xs text-secondary">—</span>;
           return (
             <Badge
-              variant={PAYMENT_TYPE_VARIANTS[provider] || "neutral"}
+              variant={PAYMENT_STATUS_VARIANTS[paymentStatus] || "neutral"}
               size="sm"
             >
-              {PAYMENT_TYPE_LABELS[provider] || provider}
+              {PAYMENT_STATUS_LABELS[paymentStatus] || paymentStatus}
+            </Badge>
+          );
+        },
+      },
+      {
+        title: "Shipping",
+        key: "shippingType",
+        width: 130,
+        render: (_, record) => {
+          const shippingType = record?.shippingType;
+          if (!shippingType)
+            return <span className="text-xs text-secondary">—</span>;
+          return (
+            <Badge
+              variant={SHIPPING_TYPE_VARIANTS[shippingType] || "neutral"}
+              size="sm"
+            >
+              {SHIPPING_TYPE_LABELS[shippingType] || shippingType}
             </Badge>
           );
         },
@@ -136,10 +171,10 @@ const OrdersTable = ({
       data={items}
       rowKey="id"
       loading={loading}
-      scroll={{ x: 1100 }}
-      emptyTitle="No orders match your filters"
-      emptyDescription="Try adjusting filters or come back later."
-      emptyIcon={Inbox}
+      scroll={{ x: 1200 }}
+      emptyTitle={emptyTitle}
+      emptyDescription={emptyDescription}
+      emptyIcon={emptyIcon}
       pagination={{
         current: page,
         pageSize: pagination.limit,

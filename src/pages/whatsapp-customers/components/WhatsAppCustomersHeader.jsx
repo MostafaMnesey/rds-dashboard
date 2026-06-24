@@ -5,9 +5,7 @@ const WhatsAppCustomersHeader = ({ totalCount = 0, onCreate }) => {
     return (
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-main/10 text-main">
-                    <MessageCircle size={22} />
-                </div>
+
                 <div className="min-w-0">
                     <h1 className="font-oswald text-3xl font-bold uppercase tracking-wide text-soft-black">
                         Customers

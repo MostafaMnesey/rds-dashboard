@@ -25,7 +25,7 @@ const System = lazy(() => import("./pages/system/System"));
 const Coupons = lazy(() => import("./pages/coupons/Coupons"));
 const Shipping = lazy(() => import("./pages/shipping/Shipping"));
 const WhatsAppCustomers = lazy(() => import("./pages/whatsapp-customers/WhatsAppCustomers"));
-
+const AbandonedCheckouts = lazy(() => import("./pages/abandoned-checkouts/AbandonedCheckouts"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -47,7 +47,7 @@ const PAGE_TITLES = {
   "/coupons": "Coupons",
   "/shipping": "Shipping",
   "/customers": "Customers",
-
+  "/abandoned-checkouts": "Abandoned Checkouts",
 };
 
 const DashboardLayout = ({ children }) => {
@@ -135,6 +135,16 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <WhatsAppCustomers />
+              </ProtectedRoute>
+            }
+          />
+
+
+          <Route
+            path="/abandoned-checkouts"
+            element={
+              <ProtectedRoute>
+                <AbandonedCheckouts />
               </ProtectedRoute>
             }
           />

@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { getOrders } from "../../api/orders";
-import { DEFAULT_PAGE_SIZE } from "./data/constants";
+import { getAbandonedCheckouts } from "../../api/orders";
+import { DEFAULT_PAGE_SIZE } from "../orders/data/constants";
 
 const formatDateParam = (dateObj) => {
   if (!dateObj) return undefined;
@@ -16,7 +16,7 @@ const formatDateParam = (dateObj) => {
   }
 };
 
-export const useOrders = () => {
+export const useAbandonedCheckouts = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -39,7 +39,7 @@ export const useOrders = () => {
 
   const queryKey = useMemo(
     () => [
-      "orders",
+      "abandoned-checkouts",
       {
         page,
         search: debouncedSearch,
@@ -64,7 +64,7 @@ export const useOrders = () => {
   const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey,
     queryFn: () =>
-      getOrders({
+      getAbandonedCheckouts({
         page,
         limit: DEFAULT_PAGE_SIZE,
         search: debouncedSearch || undefined,

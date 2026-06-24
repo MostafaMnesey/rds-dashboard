@@ -1,10 +1,4 @@
-import {
-  Home,
-  Plane,
-  Clock,
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
+import { Home, Plane, Clock, CheckCircle2, XCircle } from "lucide-react";
 
 export const DEFAULT_PAGE_SIZE = 10;
 
@@ -12,7 +6,7 @@ export const ORDER_SOURCES = {
   WHATSAPP: "whatsapp",
 };
 
-/* ───── Shipping types ───── */
+/* ───── Shipping types (form cards) ───── */
 export const SHIPPING_TYPES = [
   {
     value: "inside",
@@ -28,7 +22,14 @@ export const SHIPPING_TYPES = [
   },
 ];
 
-/* ───── Payment statuses (for form) ───── */
+/* ───── Shipping filter options ───── */
+export const SHIPPING_TYPE_FILTER_OPTIONS = [
+  { value: "", label: "All Shipping Types" },
+  { value: "inside", label: "Inside UAE" },
+  { value: "outside", label: "Outside UAE" },
+];
+
+/* ───── Payment statuses (manual-order form only) ───── */
 export const PAYMENT_STATUSES = [
   {
     value: "pending",
@@ -53,18 +54,31 @@ export const PAYMENT_STATUSES = [
   },
 ];
 
-/* ───── Order statuses (mirrors orders feature) ───── */
+/* ───── Order statuses (list / details / filters) ───── */
 export const ORDER_STATUSES = [
   { value: "PENDING", label: "Pending" },
-  { value: "PAID", label: "Paid" },
-  { value: "FAILED", label: "Failed" },
-  { value: "REFUNDED", label: "Refunded" },
+  { value: "FULFILLED", label: "Fulfilled" },
+  { value: "SHIPPED", label: "Shipped" },
+  { value: "RETURNED", label: "Returned" },
   { value: "CANCELLED", label: "Cancelled" },
 ];
 
 export const STATUS_FILTER_OPTIONS = [
   { value: "", label: "All Statuses" },
   ...ORDER_STATUSES,
+];
+
+/* ───── Payment status filters for orders list ───── */
+export const ORDER_PAYMENT_STATUSES = [
+  { value: "PENDING", label: "Pending" },
+  { value: "PAID", label: "Paid" },
+  { value: "UNPAID", label: "Unpaid" },
+  { value: "REFUNDED", label: "Refunded" },
+];
+
+export const PAYMENT_STATUS_FILTER_OPTIONS = [
+  { value: "", label: "All Payment Statuses" },
+  ...ORDER_PAYMENT_STATUSES,
 ];
 
 export const DAY_OPTIONS = [

@@ -21,19 +21,21 @@ export const useWhatsAppOrders = () => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [status, setStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("");
+  const [shippingType, setShippingType] = useState("");
   const [day, setDay] = useState([]);
   const [date, setDate] = useState(null);
 
-  /* Debounce search */
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search.trim()), 400);
     return () => clearTimeout(t);
   }, [search]);
 
-  /* Reset to first page when filters change */
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, status, day, date]);
+  }, [debouncedSearch, status, paymentStatus, shippingType, day, date]);
+
+  const formattedDate = formatDateParam(date);
 
   const queryKey = useMemo(
     () => [
@@ -43,24 +45,36 @@ export const useWhatsAppOrders = () => {
         page,
         search: debouncedSearch,
         status,
+        paymentStatus,
+        shippingType,
         day,
-        date: formatDateParam(date),
+        date: formattedDate,
       },
     ],
-    [page, debouncedSearch, status, day, date],
+    [
+      page,
+      debouncedSearch,
+      status,
+      paymentStatus,
+      shippingType,
+      day,
+      formattedDate,
+    ],
   );
 
   const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey,
     queryFn: () =>
       getOrders({
-        source: ORDER_SOURCES.WHATSAPP, // 👈 hard-locked filter
+        source: ORDER_SOURCES.WHATSAPP,
         page,
         limit: DEFAULT_PAGE_SIZE,
         search: debouncedSearch || undefined,
         status: status || undefined,
+        paymentStatus: paymentStatus || undefined,
+        shippingType: shippingType || undefined,
         day: day?.length ? day : undefined,
-        date: formatDateParam(date),
+        date: formattedDate,
       }),
     placeholderData: keepPreviousData,
     staleTime: 30_000,
@@ -77,12 +91,19 @@ export const useWhatsAppOrders = () => {
   const onResetFilters = useCallback(() => {
     setSearch("");
     setStatus("");
+    setPaymentStatus("");
+    setShippingType("");
     setDay([]);
     setDate(null);
   }, []);
 
   const hasActiveFilters =
-    !!debouncedSearch || !!status || (day && day.length > 0) || !!date;
+    !!debouncedSearch ||
+    !!status ||
+    !!paymentStatus ||
+    !!shippingType ||
+    (day && day.length > 0) ||
+    !!date;
 
   return {
     items,
@@ -94,10 +115,14 @@ export const useWhatsAppOrders = () => {
     filters: {
       search,
       status,
+      paymentStatus,
+      shippingType,
       day,
       date,
       onSearchChange: setSearch,
       onStatusChange: (v) => setStatus(v || ""),
+      onPaymentStatusChange: (v) => setPaymentStatus(v || ""),
+      onShippingTypeChange: (v) => setShippingType(v || ""),
       onDayChange: (v) => setDay(v || []),
       onDateChange: (v) => setDate(v || null),
       onReset: onResetFilters,

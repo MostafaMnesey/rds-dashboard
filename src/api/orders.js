@@ -3,7 +3,13 @@ import API from "./index";
 export const getOrders = async (params) => {
   return await API.get("/dashboard/orders", {
     params,
-    // Repeat keys for arrays: ?day=today&day=yesterday
+    paramsSerializer: { indexes: null },
+  });
+};
+
+export const getAbandonedCheckouts = async (params) => {
+  return await API.get("/dashboard/orders/abandoned-checkout", {
+    params,
     paramsSerializer: { indexes: null },
   });
 };

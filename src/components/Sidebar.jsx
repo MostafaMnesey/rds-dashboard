@@ -14,6 +14,7 @@ import {
   X,
   Truck,
   MessageCircle,
+  Clock3,
 } from "lucide-react";
 import { useAppStore } from "../store";
 
@@ -23,7 +24,11 @@ const NAV_LINKS = [
   { to: "/categories", label: "Categories", icon: FolderTree },
   { to: "/orders", label: "Orders", icon: ShoppingCart },
   { to: "/customers", label: "Customers", icon: MessageCircle },
-
+  {
+    to: "/abandoned-checkouts",
+    label: "Abandoned Checkouts",
+    icon: Clock3,
+  },
   { to: "/blogs", label: "Blogs", icon: BookOpen },
   { to: "/banners", label: "Banners", icon: ImageIcon },
   { to: "/system", label: "System & Admins", icon: Settings },

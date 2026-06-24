@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import { MessageCircle } from "lucide-react";
-import { DataTable } from "../../../components/ui";
+import { DataTable, Badge } from "../../../components/ui";
 import OrderStatusSelect from "../../orders/components/OrderStatusSelect";
 import WhatsAppOrderRowActions from "./WhatsAppOrderRowActions";
 import {
@@ -8,6 +8,12 @@ import {
     formatDateTime,
     shortId,
 } from "../../orders/utils/formatters";
+import {
+    PAYMENT_STATUS_LABELS,
+    PAYMENT_STATUS_VARIANTS,
+    SHIPPING_TYPE_LABELS,
+    SHIPPING_TYPE_VARIANTS,
+} from "../../orders/data/constants";
 
 const WhatsAppOrdersTable = ({
     items,
@@ -39,18 +45,26 @@ const WhatsAppOrdersTable = ({
                 key: "customer",
                 render: (_, record) => {
                     const addr = record?.shippingAddress || {};
-                    const firstName = addr.firstName || record?.user?.name || "Guest";
+                    const firstName = addr.firstName || "";
                     const lastName = addr.lastName || "";
-                    const name = `${firstName} ${lastName}`.trim();
-                    const email = record?.guestEmail || record?.user?.email || "—";
+                    const fullName =
+                        [firstName, lastName].filter(Boolean).join(" ") ||
+                        record?.user?.name ||
+                        "Guest";
+
+                    const subline =
+                        record?.guestEmail ||
+                        record?.user?.email ||
+                        addr?.phone ||
+                        "—";
 
                     return (
                         <div className="flex flex-col">
                             <span className="text-sm font-semibold text-soft-black">
-                                {name}
+                                {fullName}
                             </span>
                             <span className="max-w-[220px] truncate text-xs text-secondary">
-                                {email}
+                                {subline}
                             </span>
                         </div>
                     );
@@ -78,6 +92,46 @@ const WhatsAppOrdersTable = ({
                         {orderItems?.length || 0}
                     </span>
                 ),
+            },
+            {
+                title: "Payment",
+                key: "paymentStatus",
+                width: 140,
+                render: (_, record) => {
+                    const paymentStatus = record?.payments?.[0]?.status;
+                    if (!paymentStatus) {
+                        return <span className="text-xs text-secondary">—</span>;
+                    }
+
+                    return (
+                        <Badge
+                            variant={PAYMENT_STATUS_VARIANTS[paymentStatus] || "neutral"}
+                            size="sm"
+                        >
+                            {PAYMENT_STATUS_LABELS[paymentStatus] || paymentStatus}
+                        </Badge>
+                    );
+                },
+            },
+            {
+                title: "Shipping",
+                key: "shippingType",
+                width: 130,
+                render: (_, record) => {
+                    const shippingType = record?.shippingType;
+                    if (!shippingType) {
+                        return <span className="text-xs text-secondary">—</span>;
+                    }
+
+                    return (
+                        <Badge
+                            variant={SHIPPING_TYPE_VARIANTS[shippingType] || "neutral"}
+                            size="sm"
+                        >
+                            {SHIPPING_TYPE_LABELS[shippingType] || shippingType}
+                        </Badge>
+                    );
+                },
             },
             {
                 title: "Total",
@@ -135,7 +189,7 @@ const WhatsAppOrdersTable = ({
             data={items}
             rowKey="id"
             loading={loading}
-            scroll={{ x: 1100 }}
+            scroll={{ x: 1300 }}
             emptyTitle="No WhatsApp orders yet"
             emptyDescription='Click "New Order" to create your first WhatsApp order.'
             emptyIcon={MessageCircle}

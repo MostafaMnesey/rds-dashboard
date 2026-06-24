@@ -3,6 +3,12 @@ import toast from "react-hot-toast";
 import { updateOrderStatus, deleteOrder } from "../../api/orders";
 import { getErrorMessage, getSuccessMessage } from "../../lib/errors";
 
+const invalidateOrderQueries = (qc) => {
+  qc.invalidateQueries({ queryKey: ["orders"] });
+  qc.invalidateQueries({ queryKey: ["abandoned-checkouts"] });
+  qc.invalidateQueries({ queryKey: ["order"] });
+};
+
 export const useOrderMutations = ({ onDeleted } = {}) => {
   const qc = useQueryClient();
 
@@ -10,7 +16,7 @@ export const useOrderMutations = ({ onDeleted } = {}) => {
     mutationFn: updateOrderStatus,
     onSuccess: (res) => {
       toast.success(getSuccessMessage(res, "Order status updated"));
-      qc.invalidateQueries({ queryKey: ["orders"] });
+      invalidateOrderQueries(qc);
     },
     onError: (error) => {
       toast.error(getErrorMessage(error, "Failed to update order status"));
@@ -21,7 +27,7 @@ export const useOrderMutations = ({ onDeleted } = {}) => {
     mutationFn: deleteOrder,
     onSuccess: (res) => {
       toast.success(getSuccessMessage(res, "Order deleted"));
-      qc.invalidateQueries({ queryKey: ["orders"] });
+      invalidateOrderQueries(qc);
       onDeleted?.();
     },
     onError: (error) => {
