@@ -15,7 +15,7 @@ export const getAbandonedCheckouts = async (params) => {
 };
 
 export const getOrder = async (id) => {
-  return await API.get(`/dashboard/orders/${id}`);
+  return await API.get(`/dashboard/orders/order/${id}`);
 };
 
 export const updateOrderStatus = async ({ id, status }) => {
