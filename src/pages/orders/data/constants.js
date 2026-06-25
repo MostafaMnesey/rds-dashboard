@@ -66,10 +66,10 @@ export const SHIPPING_TYPE_LABELS = {
   outside: "Outside UAE",
 };
 
-/* ✅ display only — مش فلتر */
+/* ───── Payment providers (display only — not a filter) ───── */
 export const PAYMENT_PROVIDER_LABELS = {
   stripe: "Stripe",
-  cod: "Cash on Delivery",
+  cod: "COD",
 };
 
 export const PAYMENT_PROVIDER_VARIANTS = {

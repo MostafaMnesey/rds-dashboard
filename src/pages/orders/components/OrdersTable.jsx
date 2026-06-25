@@ -9,6 +9,8 @@ import {
   PAYMENT_STATUS_VARIANTS,
   SHIPPING_TYPE_LABELS,
   SHIPPING_TYPE_VARIANTS,
+  PAYMENT_PROVIDER_LABELS,
+  PAYMENT_PROVIDER_VARIANTS,
 } from "../data/constants";
 
 const OrdersTable = ({
@@ -22,7 +24,6 @@ const OrdersTable = ({
   onDelete,
   updatingId,
   deletingId,
-  // ↓ optional — للـ reuse في صفحات تانية
   emptyTitle = "No orders match your filters",
   emptyDescription = "Try adjusting filters or come back later.",
   emptyIcon = Inbox,
@@ -116,6 +117,24 @@ const OrdersTable = ({
         },
       },
       {
+        title: "Provider",
+        key: "provider",
+        width: 110,
+        render: (_, record) => {
+          const provider = record?.payments?.[0]?.provider;
+          if (!provider)
+            return <span className="text-xs text-secondary">—</span>;
+          return (
+            <Badge
+              variant={PAYMENT_PROVIDER_VARIANTS[provider] || "neutral"}
+              size="sm"
+            >
+              {PAYMENT_PROVIDER_LABELS[provider] || provider}
+            </Badge>
+          );
+        },
+      },
+      {
         title: "Total",
         dataIndex: "total",
         key: "total",
@@ -171,7 +190,7 @@ const OrdersTable = ({
       data={items}
       rowKey="id"
       loading={loading}
-      scroll={{ x: 1200 }}
+      scroll={{ x: 1320 }}
       emptyTitle={emptyTitle}
       emptyDescription={emptyDescription}
       emptyIcon={emptyIcon}
