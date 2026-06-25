@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
+import { ShoppingCart } from "lucide-react";
 import { PageHeader } from "../../components/ui";
-import OrdersFilters from "../orders/components/OrdersFilters";
 import OrdersTable from "../orders/components/OrdersTable";
 import OrderDetailsDrawer from "../orders/components/OrderDetailsDrawer";
+import AbandonedOrdersFilters from "./components/AbandonedOrdersFilters";
 import { useOrderMutations } from "../orders/useOrderMutations";
 import { useAbandonedCheckouts } from "./useAbandonedCheckouts";
 
@@ -50,12 +51,12 @@ const AbandonedCheckouts = () => {
                 title="Abandoned Checkouts"
                 subtitle={
                     pagination.totalItems
-                        ? `${pagination.totalItems} tracked abandoned checkouts`
-                        : "Track customers who reached checkout but did not complete the order"
+                        ? `${pagination.totalItems} abandoned checkouts tracked`
+                        : "Track customers who started checkout but didn't complete their order"
                 }
             />
 
-            <OrdersFilters {...filters} />
+            <AbandonedOrdersFilters {...filters} />
 
             <OrdersTable
                 items={items}
@@ -68,6 +69,9 @@ const AbandonedCheckouts = () => {
                 onDelete={handleDelete}
                 updatingId={updateStatus.isPending ? updateStatus.variables?.id : null}
                 deletingId={remove.isPending ? remove.variables : null}
+                emptyTitle="No abandoned checkouts found"
+                emptyDescription="Customers who reach checkout but don't complete will appear here."
+                emptyIcon={ShoppingCart}
             />
 
             <OrderDetailsDrawer

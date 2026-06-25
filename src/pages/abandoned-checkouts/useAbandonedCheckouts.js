@@ -20,9 +20,6 @@ export const useAbandonedCheckouts = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [status, setStatus] = useState("");
-  const [paymentStatus, setPaymentStatus] = useState("");
-  const [shippingType, setShippingType] = useState("");
   const [day, setDay] = useState([]);
   const [date, setDate] = useState(null);
 
@@ -33,7 +30,7 @@ export const useAbandonedCheckouts = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, status, paymentStatus, shippingType, day, date]);
+  }, [debouncedSearch, day, date]);
 
   const formattedDate = formatDateParam(date);
 
@@ -43,22 +40,11 @@ export const useAbandonedCheckouts = () => {
       {
         page,
         search: debouncedSearch,
-        status,
-        paymentStatus,
-        shippingType,
         day,
         date: formattedDate,
       },
     ],
-    [
-      page,
-      debouncedSearch,
-      status,
-      paymentStatus,
-      shippingType,
-      day,
-      formattedDate,
-    ],
+    [page, debouncedSearch, day, formattedDate],
   );
 
   const { data, isLoading, isFetching, refetch } = useQuery({
@@ -68,9 +54,6 @@ export const useAbandonedCheckouts = () => {
         page,
         limit: DEFAULT_PAGE_SIZE,
         search: debouncedSearch || undefined,
-        status: status || undefined,
-        paymentStatus: paymentStatus || undefined,
-        shippingType: shippingType || undefined,
         day: day?.length ? day : undefined,
         date: formattedDate,
       }),
@@ -88,20 +71,12 @@ export const useAbandonedCheckouts = () => {
 
   const onResetFilters = useCallback(() => {
     setSearch("");
-    setStatus("");
-    setPaymentStatus("");
-    setShippingType("");
     setDay([]);
     setDate(null);
   }, []);
 
   const hasActiveFilters =
-    !!debouncedSearch ||
-    !!status ||
-    !!paymentStatus ||
-    !!shippingType ||
-    (day && day.length > 0) ||
-    !!date;
+    !!debouncedSearch || (day && day.length > 0) || !!date;
 
   return {
     items,
@@ -112,15 +87,9 @@ export const useAbandonedCheckouts = () => {
 
     filters: {
       search,
-      status,
-      paymentStatus,
-      shippingType,
       day,
       date,
       onSearchChange: setSearch,
-      onStatusChange: (v) => setStatus(v || ""),
-      onPaymentStatusChange: (v) => setPaymentStatus(v || ""),
-      onShippingTypeChange: (v) => setShippingType(v || ""),
       onDayChange: (v) => setDay(v || []),
       onDateChange: (v) => setDate(v || null),
       onReset: onResetFilters,
