@@ -12,6 +12,18 @@ const normalizePhone = (val) => {
   return v.startsWith("+") ? v : `+${v}`;
 };
 
+const parseOptionalAmount = (value) => {
+  if (value == null) return null;
+
+  const raw = typeof value === "string" ? value.trim() : value;
+  if (raw === "") return null;
+
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || parsed <= 0) return null;
+
+  return parsed;
+};
+
 export const buildManualOrderPayload = (values) => {
   const customer = {
     firstName: trim(values.customer?.firstName) || "",
@@ -45,9 +57,9 @@ export const buildManualOrderPayload = (values) => {
     shippingType: values.shippingType || "inside",
   };
 
-  const coupon = trim(values.couponCode);
-  if (coupon) {
-    payload.couponCode = coupon;
+  const discount = parseOptionalAmount(values.discount);
+  if (discount !== null) {
+    payload.discount = discount;
   }
 
   return payload;
@@ -123,11 +135,16 @@ export const calculateShippingCost = (
   };
 };
 
-export const getInitialFormValues = () => ({
-  ...WHATSAPP_ORDER_DEFAULTS,
-  customer: { ...WHATSAPP_ORDER_DEFAULTS.customer },
-  items: [],
-});
+export const getInitialFormValues = () => {
+  const { couponCode, customer, ...rest } = WHATSAPP_ORDER_DEFAULTS;
+
+  return {
+    ...rest,
+    discount: "",
+    customer: { ...customer },
+    items: [],
+  };
+};
 
 export const translateWhatsAppOrderErrorCode = (code) => {
   if (!code) return null;

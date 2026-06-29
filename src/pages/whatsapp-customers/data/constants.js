@@ -1,4 +1,4 @@
-import { Home, Plane, Clock, CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, Clock, Home, Plane, XCircle } from "lucide-react";
 
 export const DEFAULT_PAGE_SIZE = 10;
 
@@ -46,8 +46,8 @@ export const PAYMENT_STATUSES = [
     dot: "bg-main",
   },
   {
-    value: "failed",
-    label: "Failed",
+    value: "unpaid",
+    label: "Unpaid",
     icon: XCircle,
     accent: "bg-red-50 text-red-700",
     dot: "bg-red-500",
