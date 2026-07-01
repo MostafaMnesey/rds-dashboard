@@ -42,6 +42,17 @@ const OrdersTable = ({
         ),
       },
       {
+        title: "Order Number",
+        dataIndex: "orderNumber",
+        key: "orderNumber",
+        width: 130,
+        render: (orderNumber) => (
+          <span className="font-mono text-xs font-semibold text-soft-black text-center">
+            {orderNumber}
+          </span>
+        ),
+      },
+      {
         title: "Customer",
         dataIndex: "guestEmail",
         key: "customer",
