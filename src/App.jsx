@@ -1,17 +1,17 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { lazy, Suspense, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import {
   BrowserRouter,
-  Routes,
-  Route,
   Navigate,
+  Route,
+  Routes,
   useLocation,
 } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "react-hot-toast";
-import { useAppStore } from "./store";
-import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
 import LoadingState from "./components/ui/LoadingState";
+import { useAppStore } from "./store";
 
 // Lazy-loaded pages (code splitting)
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -24,8 +24,13 @@ const Banners = lazy(() => import("./pages/banners/Banners"));
 const System = lazy(() => import("./pages/system/System"));
 const Coupons = lazy(() => import("./pages/coupons/Coupons"));
 const Shipping = lazy(() => import("./pages/shipping/Shipping"));
-const WhatsAppCustomers = lazy(() => import("./pages/whatsapp-customers/WhatsAppCustomers"));
-const AbandonedCheckouts = lazy(() => import("./pages/abandoned-checkouts/AbandonedCheckouts"));
+const WhatsAppCustomers = lazy(
+  () => import("./pages/whatsapp-customers/WhatsAppCustomers"),
+);
+const AbandonedCheckouts = lazy(
+  () => import("./pages/abandoned-checkouts/AbandonedCheckouts"),
+);
+const Mails = lazy(() => import("./pages/mails/Mails"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -47,6 +52,7 @@ const PAGE_TITLES = {
   "/coupons": "Coupons",
   "/shipping": "Shipping",
   "/customers": "Customers",
+  "/mails": "Mails (Contact Us)",
   "/abandoned-checkouts": "Abandoned Checkouts",
 };
 
@@ -139,7 +145,6 @@ const App = () => {
             }
           />
 
-
           <Route
             path="/abandoned-checkouts"
             element={
@@ -186,6 +191,15 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Coupons />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/mails"
+            element={
+              <ProtectedRoute>
+                <Mails />
               </ProtectedRoute>
             }
           />

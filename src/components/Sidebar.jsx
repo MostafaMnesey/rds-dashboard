@@ -1,21 +1,22 @@
-import { memo, useCallback, useEffect } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Modal } from "antd";
 import {
-  LayoutGrid,
-  Package,
-  FolderTree,
-  ShoppingCart,
   BookOpen,
-  Image as ImageIcon,
-  Settings,
-  LogOut,
-  Tag,
-  X,
-  Truck,
-  MessageCircle,
   Clock3,
+  FolderTree,
+  Image as ImageIcon,
+  LayoutGrid,
+  LogOut,
+  Mail,
+  MessageCircle,
+  Package,
+  Settings,
+  ShoppingCart,
+  Tag,
+  Truck,
+  X,
 } from "lucide-react";
+import { memo, useCallback, useEffect } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppStore } from "../store";
 
 const NAV_LINKS = [
@@ -35,9 +36,10 @@ const NAV_LINKS = [
   { to: "/shipping", label: "Shipping", icon: Truck },
 
   { to: "/coupons", label: "Coupons", icon: Tag },
+  { to: "/mails", label: "Mails (Contact Us)", icon: Mail },
 ];
 
-const Sidebar = ({ open = false, onClose = () => { } }) => {
+const Sidebar = ({ open = false, onClose = () => {} }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const clearAuth = useAppStore((s) => s.clearAuth);
@@ -88,15 +90,17 @@ const Sidebar = ({ open = false, onClose = () => { } }) => {
       {/* Backdrop (mobile/tablet only) */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 z-30 bg-black/30 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"
-          }`}
+        className={`fixed inset-0 z-30 bg-black/30 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
         aria-hidden="true"
       />
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-black/5 bg-white transition-transform duration-300 ease-out lg:w-64 lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-black/5 bg-white transition-transform duration-300 ease-out lg:w-64 lg:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Logo */}
         <div className="flex h-20 items-center justify-between gap-3 border-b border-black/5 px-5 lg:px-6">
